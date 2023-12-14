@@ -1,0 +1,390 @@
+Casos activos
+        2023_02_24 -   crud de comida.
+        2023_02_15 -   crud de gerencia.
+        2023_03_02 --  Al iniciar seccion, Validar que no inicie un mismo usuario, de forma simultanea.
+        2023_07_17 -   En el formulario de comensales, ajuste para registrar a los comensales usando la tecla de Ctr + Enter.
+
+Para area de Pre pedido
+        - Se quiere que una persona del ivi haga una solicitud y carge una lista de personal, esta lista se puede cargar uno a uno, o que el sistema absorva un txt.
+        - Haya un área para la persona que aprueba una solicitud, que puede ser un Gerente general de Operaciones.
+        - Cuando se apruebe la solicitud el personal de la solicitud pasaran a personal visitante, 
+          cada persona al estar casado con una solicitud tal ves hacer que, cuando se registre el comensal valide por
+          una fecha desde y hasta de la solicitud.
+        - Cuando se busque al personal visitante, mostraria estos tres campos.
+                - personal_visitante_ubicacion, este campo aparece en el frm de personal externo.
+                - personal_visitante campo solicitante
+                - personal_visitante campo quien autoriza
+
+Sistema
+        190.170.128.161
+        -22 ssh
+        usuario: comedorweb
+        clave:   $v1vi4nA
+        enlace para acceder al sistema
+            http://190.170.128.161/ivic_sistema_integral
+        comando para reiniciar
+                systemctl reboot
+
+Base de datos
+        http://190.170.128.163/phpmyadmin
+        usuario: pma
+        clave:   pma.ysql.ivic2023
+
+        usuario: admcomedor
+        clave:   adm.ysql.ivic2023
+
+
+FORMATO IVIC NORMAL
+        ANGEL
+        )IVIC= INSTITUTO VENEZOLANO DE INVESTIGACIONES CIENTFICAS
+        CEDULAÑ16922681
+        DIR.ÑCarretera Panamericana, km 11, Altos de Pipe. Apdo. 20632, Cdigo. Postal, 1020'A
+        TEL.Ñ¡58 )0212='5041157
+
+        FRANCI
+        )IVIC= INSTITUTO VENEZOLANO DE INVESTIGACIONES CIENTFICAS
+        CEDULAÑ11203084
+        DIR.ÑCarretera Panamericana, km 11, Altos de Pipe. Apdo. 20632, Cdigo. Postal, 1020'A
+        TEL.Ñ¡58 )0212='5041157
+
+        RONALD (No pasa quizas sea la cedula)
+        )IVIC= INSTITUTO VENEZOLANO DE INVESTIGACIONES CIENTIFICAS        
+        CEDULAÑ28387506
+        DIR.ÑCarretera Panamericana, km 11, Altos de Pipe. Apdo. 20632, Cigo. Postal, 1020'A
+        TEL.Ñ¡58 )0212='5041157
+
+
+FORMATO IVIC MAS VIEJO, CODIGO DE BARRA
+        99141396
+        14139	6872093	Maria Trinidad	Pereira Goncalves
+
+Usuarios
+        erojas
+        20328898	Rojas	Enyalyn
+
+Puntos para reunion con comedor
+        Avisarle que si no pueden aceder a algun area no los soliciten al correo.
+        Area de personal externo
+        Area de programacion de comensales.
+        Cambios nuevos.
+
+PARA DESACTIVAR TEMPORALMENTE EL USUARIO DE FABIANA
+    /*
+    384	297	3	2023-08-14	2023-09-22
+    */
+    SELECT * FROM estados_temporales WHERE id_personal_ivic = '297'
+
+___________________________________________________________________________________________________________________
+
+
+
+
+        Vacaciones, Reposo, Comision de servicio, Permiso
+
+
+comensales_h_estado_temporal
+    id
+    comensales_id
+    estados_id
+    fecha_desde
+    fecha_hasta
+
+        
+___________________________________________________________________________________________________________________
+Resueltos
+
+Actualización 22
+        2023_09_14 +   Al registrar un comensal, si la persona tiene un estado temporal (Vacaciones, Reposo, Comision de servicio, Permiso),  dejar que se registre.
+        2023_08_07 +   Al registrar un comensal colocar un mensaje de que se encuentra de vacaciones.
+        2023_09_18 +   En el reporte de comensales colocar oblicatorio seleccionar los campos de fecha.
+        2023_08_07 +   En el reporte de comensales junto con los filtros, colocar el campo de "Estado Temporal".
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                comensales_h_estado_temporal     -> Agregar esta tabla
+
+Actualización 21
+        2023_07_27 +   Para el area de registrar personal externo, colocar un area para subir una foto.
+        2023_07_27 +   Creacion de crud de Centros.
+        2023_07_27 +   Ajuste para no permitir repetir el nombre del campo "Coordinación / Unidad".
+        Para Actualizar
+            Fuentes
+                cmv
+
+Actualización 20
+        2023_07_17 +   Para el area de registrar personal externo, colocar un area para subir una foto.
+        2023_07_20 +   En persnal ivic, colocar nuevo campo de gerencia, y redefinir los nombres de los que estan actuales.
+        2023_07_20 +   En persnal ivic, Ajustar para cuando se elimine un registro, elimine tambien la foto, en caso de tener alguna.
+        2023_07_21 +   Ajuste para limpiar la lista de personal externo.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                gerencias_2     -> Agregar esta tabla
+                personal_ivic.id_gerencia_2 -> Agregar este campo y su foráneo.
+
+Actualización 19
+        2023_07_17 +   Programación para leer el formato de carnet mas viejo.
+        2023_07_17 +   Incidencia, al registrar a un comensal, enfocar el ultimo campo que se estubo usandose.
+        2023_07_17 +   Incidencia, al registrar a un comensal, hacer que muestre el estado de Suspendido.
+        2023_07_17 +   Al registrar a un comensal, cuando aparece las dos fichas, y uno de ellos, esta desactivado, ocultar esta ficha.
+        2023_07_17 +   Para el menu colocar un enlace para registrar personal externo para Gestion Humana.
+        Para Actualizar
+            Fuentes
+                cmv
+
+Actualización 18
+        2023_07_14 +   Incidencia, En el formulario de comensales, Validar que no se busque cedula, carnet o qr al mismo tiempo.
+        2023_07_14 +   Incidencia, En el formulario de Programación de Comensales, Validar que no se busque cedula, carnet o qr al mismo tiempo.
+        Para Actualizar
+            Fuentes
+                cmv
+
+Actualización 17
+        2023_07_14 +   En el formulario de comensales, se le quito el focus al boton de registrar.
+        2023_07_14 +   Se ajusto para que pudiera leer el codigo Qr.
+        Para Actualizar
+            Fuentes
+                cmv
+
+Actualización 16
+        2023_07_13 +   El reporte de comensales, colocar el campo de cedula en otro campo, en formato -> PDF.
+        2023_07_13 +   El reporte de comensales, colocar el campo de cedula en otro campo, en formato -> EXCEL.
+        Para Actualizar
+            Fuentes
+                cmv
+
+Actualización 15
+        2023_07_10 +   Programación para aceptar el lector, puede leer codigo de barra y QR.
+        Para Actualizar
+            Fuentes
+                cmv
+
+Actualización 14
+        2023_06_27 +   Incidencia, en la lista de personal Ivic limpiar los campos del filtro al ingresar en esta área.
+        2023_07_06 +   En la ficha de la persona guardar la fecha en que coloco al personal inactivo, como "suspendido" o "egresado".
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                personal_ivic.fecha_no_activo     -> Agregar este campo
+
+Actualización 13
+        2023_06_22 +   En la ficha de la persona colocar fecha de ingreso.
+        2023_06_22 +   En la ficha de la persona colocar departamento.
+        2023_06_22 +   En la ficha de la persona colocar categoria.
+        2023_06_22 +   En la ficha agregar en el campo de estado -> "Suspendidos".
+        2023_06_26 +   Crear crud de departamentos.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                departamento                    -> Agregar esta tabla
+                categoria                       -> Agregar esta tabla
+                personal_ivic.id_departamento   -> Agregar este campo y su fornaneo
+                personal_ivic.id_categoria      -> Agregar este campo y su fornaneo
+                personal_ivic.fecha_ingreso     -> Agregar este campo
+                personal_ivic.estado            -> Actualizar comentario "1 = Activo, 2 = Egresado, 3 = Vacaciones(ya no se usa), 4 = Reposo(ya no se usa), 5 = Suspendido".
+
+
+Actualización 12
+        2023_06_12 +   crud para guardar lista de comensales a programarse para que se agreguen de forma automatica.
+        2023_06_12 +   Funcion que agregue los comensales que esten en la tabla "comensales_programacion", con estatus por agregar.
+        2023_06_22 +   En estados temporales agregar campo de estado temporal -> "Comision de servicio", Nota, comision de servicio, se refiere al personal del ivic que presta servicio, fuera de la institución.
+        2023_06_22 +   En estados temporales agregar "Permiso".
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                comensales_programacion -> Agregar esta tabla
+                comensales_programacion -> Agregar su foraneo a
+                        id_personal_ivic
+                        id_personal_visitante
+                        id_comedor_comida_tipo
+                        id_usuario
+
+
+Actualización 11
+        2023_06_12 +   programar la ficha del personal agregar: Tipo: Administrativo, Cientifico, Obrero, Alto nivel, Gerencial.
+        2023_06_12 +   programar la ficha del personal agregar: Condición: Activo: Fijo, contratado / Pasivo:Jubilado, Pensionado.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                Tipo        -> Agregar esta tabla
+                Condicion   -> Agregar esta tabla
+                personal_ivic.id_tipo.tinyint       -> Agregar este campo
+                personal_ivic.id_condicion.tinyint  -> Agregar esta campo
+                personal_ivic -> Agregar su foraneo con tipo
+                personal_ivic -> Agregar su foraneo con condición
+
+
+        
+Actualización 10
+        2023_06_08 +++ programar la ficha del personal ivic y en comensales, para que acepte 6 digitos en el carnet.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                personal_ivic.carnet_codigo ->cambiar la longitud a 6 digitos
+                
+
+Actualización 9
+        2023_06_01 +++ Proceso de Contrucción de areas que permita anular un comensal.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                comensales.estatus ->Agregar este campo
+                UPDATE comensales set estatus = '1'
+
+
+Actualización 8
+        2023_05_29 +++ INCIDENCIA, al editar el personal ivic, no muestra ningun mensaje.
+        Para Actualizar
+            Fuentes
+                v/personal_ivic/v_personal_ivic_listar.php
+
+Actualización 7.
+        2023_05_26 +++ En el formulario de registrar un comensal, despues de encontrar al personal, debe de enfocarse en el boton de registrar, para que funcione ENter nuevamente, esto debe de funcionar tambien para el personal externo.
+        2023_05_26 +++ INCIDENCIA, Cuando un personal es externo activo y personal del ivic, verificar que no lo deje pasar dos veces por cada uno -> Se le ha colocado que edite al personal externo, colocandolo como no activo.
+        2023_05_29 +++ En el formulario de registrar un comensal, cuando este repitiendo mostra un poco mas de información de su registro.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                comensales.id_usuario ->Agregar este campo con su foraneo
+
+Actualización 6.
+        2023_03_23 +   En el formulario del personal del Ivic, crear área para administrar estados temporales.
+        2023_03_24 +   En Comensales, validar si el comensal, tiene un estado temporal en esa fecha.
+        2023_03_23 +   Depurar el personal del Ivic, porque ya tiene a otras personas con estatus Vacaciones.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                estados -> Agregar esta tabla
+                estados_temporales -> Agregar esta tabla
+
+Actualización 5.
+        2023_03_16 +   Se quiere u programa para reportar las fotos que faltan del personal Ivic -> Se ha creado, se puede ingresar a la siguiente ruta "http://190.170.128.161/ivic_sistema_integral/textear_personal_ivic_fotos.php".
+        2023_03_17 +   Ajustar el sistema para al insertar un personal, guarde un campo para la foto con el nombre usando el numero de la cedula.
+        2023_03_17 +   En la base de datos, Depurar todos los campos vacios de la foto del personal.
+        Para Actualizar
+            Fuentes
+                cmv
+                textear_personal_ivic_fotos.php
+                tb_personal_ivic_cargar_imagen_nombre.php
+Actualización 4.
+        2023_03_09 +   Area inicial, se quiere un pie de pagina, con un texto determinado.
+        2023_03_13 +   Bitácora, actualizar el formato del pdf.
+        2023_03_13 +   Bitácora, hacer un reporte en formato de Excel.
+        2023_03_13 +   Al intentar registrar un comensal, cuando esta repitiendo guardarlo en Bitácora -> Se le coloco para que guardara con la palabra clave "Intento de Repetir".
+        2023_03_13 -   Mensaje de Bitácora, ajustar el texto que dice "personal" a "personal ivic" o "personal visitante".
+        2023_03_10 +++ Incidencia, la hora en todo el sistema se muestra con una hora de diferencia mayor a la actual -> Se ajusto la zona Horaria en el archivo php.ini.
+        2023_03_10 -   Pantalla de comensales colocarle el carnet, al ya registrado.
+        2023_03_10 -   Pantalla de comensales, despues de registrar, posicionarse en buscar carnet.
+        2023_03_09 +   Personal Ivic la lista -> colocar los campos gerencia y cargo.
+        2023_03_09 +   Personal Ivic la lista -> colocar los filtros para gerencia y cargo.
+        2023_03_09 +   Personal Ivic -> El reporte PDF, colocarlo horizontal y agregar la gerencia y cargo.
+        2023_03_09 +   Personal Ivic -> El reporte EXCEL, agregar la gerencia y cargo.
+        2023_03_07 +++ Incidencia, en el servidor -> para los reportes, en formato de excel, no funciona la librería vendor.
+        2023_03_09 +++ Se quiere un nuevo rol llamado "comedor_cajero" y prepararle su menú.
+        2023_03_09 -   Formulario de usuario, ajustar el color del Botón de guardar.
+        2023_03_10 +   Agregar este tipo de personal externo	"Honorarios Profesionales", "Ministerio de Ciencia y Tecnología", "Servicio Médico (MPPS)".
+        2023_03_10 +   Limpieza de la tabla comensales y Bitácora antes de la fecha 10-03-2023.
+        Para Actualizar
+            Fuentes
+                cmv
+            Base de datos
+                conf_roles ->Actualizar esta tabla
+
+Actualización 3.
+        2023_02_27 -   Reporte comensal -> se quiere en formato de excel.
+        2023_03_06 -   Personal Externo -> En la lista crear un reporte para imprimir en formato -> EXCEL.
+        2023_03_02 -   Personal del IVIC -> Un reporte de lista de personal y con filtro activo/ inactivo -> EN FORMATO EXCEL.
+        2023_03_07 +   Comensales -> Los reportes ajustar el formato de fecha a dd-mm-ano.
+        2023_03_07 +   En usuarios -> para los filtros, hacer que busque por nombre de usuario.
+        2023_03_06 +   Personal Externo -> En la lista colocar el campo "Estado" con un filtro.
+        2023_03_06 +   Personal Externo -> En la lista crear un reporte para imprimir en formato -> PDF.
+        2023_03_06 +   Personal Ivic -> Formulario -> Botón de cambiar imagen -> Ajustar el color para que no este morado.
+        2023_03_07 +   Personal Ivic -> Actualizar estudiantes de la lista de pregrado y postgrado..
+        2023_03_02 -   Crear area para que el usuario pueda actualizar su clave.
+        Para Actualizar
+            Fuentes
+                    cmv
+                    aplication/libraries/Vendor
+            Base de datos
+
+Actualización 2.
+        2023_02_27 -   Area de Personal Ivic -> Reporte de Activo, no Activos
+        2023_02_27 +   Login mensaje de "Usuario o Correo y Contraseña no coinciden" quitar correo.
+        2023_03_03 +   Todos los reportes PDF, revisar El title que dice NULL.
+        2023_02_27 +   Recursos Humanos -> Gestión Humana
+        2023_03_02 +   Gestión Humana -> Un reporte de lista de personal y con filtro activo/ inactivo -> EN FORMATO PDF.
+        2023_02_27 ++  Reporte comensal -> colocarle un encabezado sin los textos, solo el nombre del reporte en un cuadro.
+        2023_02_27 ++  Reporte comensal -> colocarle un filtro de tipo de Personal, para el personal externo.
+        2023_02_27 ++  Reporte comensal -> colocarle un filtro de tipo de comida.
+        2023_02_27 ++  Reporte comensal -> El filtro que no diga "Filtrado por".
+        2023_02_27 +++ Lista de Personal IVIC cambiar Id por Carnet y que lo pueda buscar en la lista.
+        2023_03_02 +++ Incidencia, Al editar una foto, si se sube una foto correctamente, igual aparece un mensaje de que no se ha podido subir.
+        2023_03_02 +   EN configuración->Usuarios->formulario -> El apellido que sea obligatorio.
+        2023_02_27 ++  Formulario en comensales, los contadores por tipo de comida.
+        2023_02_27 +++ Formulario en comensales, colocar un contador de total.
+        2023_02_27 ++  Formulario en comensales, COMENSALES colocar la comida “Desayuno” y formato  “dd-mm-ano”.
+        2023_03_02 +   Formulario en comensales, la lista de los últimos registrados, que se limpie por dia y por tipo de comida.
+        2023_02_28 ++  Formulario en comensales, para el visitante externo, mostrar el tipo de persona.
+        2023_03_02 +++ Incidencia, Al registrar comensal que no tiene la foto no le cargo la imagen por defecto.
+        2023_03_02 +++ Tabla tipo agregar-> Personal IVIC Personal IVIC Fuera de Nómina.
+        2023_03_02 +++ Tabla tipo agregar-> Policia de Miranda - Visitante.
+        2023_03_03 +++ Carga a la base de datos de un excel al personal externo.
+        Para Actualizar
+            Fuentes
+                    cmv
+                    images/logo_ivic_2.png
+            Base de datos
+                    personal_visitante_tipo -> Actualizar esta tabla
+                    personal_visitante -> Actualizar esta tabla
+                    conf_roles          -> Actualizar	Gestión Humana
+
+                
+
+Actualización 1
+        2023_02_23 +   Diseño, Reportes Estandarizar el encabezado y colores.
+        2023_02_27 +   Reporte comensal colocarlos en recursos humanos.
+        2023_02_27 +++ El usuario del sistema, el campo de correo hacer que no sea obligatorio, puedan haber varios en blanco.
+        2023_02_27 +++ Formulario en personal externo, colocar un campo de Tipo.
+        2023_02_15 +   Diseño, En cada usuario establecer texto, identificando rol (Brebe explicación) -> Se necesita más datos, ->este caso lo cierro por falta de datos
+        2023_02_15 +   Diseño, Logos y encabezados, estandarizar.
+        2023_02_17 +++ Diseño, Colocar la imagen de fondo en el login y las pantallas iniciales.
+        2023_02_17 +++ Diseño, En las pantallas iniciales, colocarle un texto de Biemvenido al Sistema.
+        2023_02_15 +   Diseño, Imagen principal (Todas las pantallas).
+        2023_02_15 +   Diseño, Estandarizar, sistema Integral del comedor IVIC (Todo el sistema Cintillo). 
+        2023_02_15 +   crud de cargo.
+        2023_02_15 +   Ficha de personal ivic, validar los datos -> Inicio Mayúscula.
+        2023_02_15 +   Ficha de personal externo, validar los datos -> Inicio Mayúscula.
+        2023_02_18 +++ Diseño, Buscar un nombre para el sistema.
+        2023_02_15 +   En personal Externo, poder inhabilitar el boton de eliminar.
+        2023_02_17 +++ Comensales, Hacer, Crud de registrar Personal Externo.
+        2023_02_17 +   Comensales, Al personal externo, colocar el campo de Estado = Activo / No Activo.
+        2023_02_15 +   Ficha de personal del IVIC, validar los datos -> sólo número.
+        2023_02_17 +++ Personal del IVIC, el nombre de la fotos sea la cedula.
+        2023_02_17 +++ Comensales, validar que no se registren comensales fuera de la hora.
+        2023_02_15 +++ separar tabla de visitante y del personal del IVIC, en la base de datos y el sistema.
+        2023_02_16 +   En el personal del IVIC, hacer que sean obligatorios los campos de Cargo, Gerencia, Código.
+        2023_02_16 +++ Comensales, al incluirlo, validar que no se registren dos de forma simultanea.
+        2023_02_16 +   Comensales, El reporte colocarle un campo mas de "TIPO DE PERSONAL" y ajustar el filtro a ello.
+        2023_02_16 +   Comensales, Al registrar un comensal, dividir las listas para el personal del IVIC Y EXTERNO.
+        2023_02_17 ++  Comensales, Al registrar un comensal, Quitar el filtro de la lista, y colocar los campos de cedula, carnet y y campo para nombre y apellido.
+        2023_02_17 ++  Comensales, Al registrar un comensal, Probar con alguien que este en las dos tablas.
+        2023_02_15 +   En el área del comedor, el mensaje de agregar, poder quitar el mensaje de ID.
+        2023_02_15 +++ En el área del comedor, colocar un contador de personal para IVIC y Visitante.
+        2023_02_15 +   login cambiar correo a usuario
+        2023_02_15 +   Restablecer contraseña quitar.
+        2023_02_15 +   Area de usuarios poder inhabilitar.
+        2023_02_15 +   En personal del IVIC, poder inhabilitar el boton de eliminar.
+
+
+Cerrado que no aplican
+        2023_02_27 --- Area de comensales, colocar un crud para Tipo.

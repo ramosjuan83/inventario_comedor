@@ -1,0 +1,1 @@
+<script src="<?php echo '' .base_url('/librerias/subir_archivo').''?>/upload.js"></script><?php //subir_archivo ?>

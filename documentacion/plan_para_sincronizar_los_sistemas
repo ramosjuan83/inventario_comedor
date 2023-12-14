@@ -1,0 +1,27 @@
+Tener el servidor en el comedor
+
+Hacer que por via ssh no se pidan clave entre ellos        
+
+Pasos para usar cron
+
+    1) Desde Servidor administrativo -> crear respaldos de las tablas
+            - personal_ivic
+            - gerencias
+            - cargos
+            - estados_temporales
+    2) Se envian las tablas a -> Al servidor de comedor
+    3) En servidor de comedor -> Se truncan las tablas
+    4) En servidor de comedor -> Se restauran las tablas
+
+
+
+    5) En servidor de comedor -> crear respaldos de las tablas
+            - comensales
+            - personal_visitante
+            - personal_visitante_tipo
+    6) Se envian las tablas a -> Al servidor de administrativo
+    7) En servidor administrativo -> Se truncan las tablas
+    8) En servidor administrativo -> Se restauran las tablas
+
+
+
