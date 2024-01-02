@@ -130,9 +130,9 @@
                             <!-- <th scope="col">ID</th> -->
                             <th scope="col" class="text-left">Artículo</th>
                             <th scope="col" class="text-left">Almacén</th>
-                            <th scope="col" class="text-left">Capacidad de Almacén</th>
-                            <th scope="col" class="text-left">Disponible</th>
-                            <th scope="col" class="text-left">Unidad Medida</th>
+                            <th scope="col" class="text-center">Capacidad de Almacén</th>
+                            <th scope="col" class="text-center">Disponible</th>
+                            <th scope="col" class="text-center">Unidad Medida</th>
                             <th scope="col">ACCIONES</th>
                         </tr>
                     </thead>
@@ -145,7 +145,7 @@
                                     <td class="text-left"><?=$dat->nombre_almacen?></td>
                                     <td class="text-center"><?=$dat->capacidad_almacen?></td>
                                     <td class="text-center"><?=$dat->disponible?></td>
-                                    <td class="text-left"><?=$dat->nombre_medida?></td>
+                                    <td class="text-center"><?=$dat->nombre_medida?></td>
                                     <td>
                                         
                                         <a class="text_azul mr-2" href="<?=site_url('Inv_inventario/editar/'.$dat->id)?>">

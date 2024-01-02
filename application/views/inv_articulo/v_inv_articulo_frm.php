@@ -223,6 +223,89 @@
                                     });                                    
                                 }
                             }
+
+                            function subirArchivos(){
+                                if(validar_control_file() == true){
+                                        var baseurl = "<?php echo base_url(); ?>";
+                                        id = document.getElementById("id").value;
+                                        $("#archivo").upload(baseurl+"index.php/Inv_articulo/get_subir_archivo",
+                                        {
+                                            id: id
+                                        },
+                                        function(respuesta){
+                                            $("#barra_de_progreso").val(0);
+                                            //mostrarRespuesta(respuesta, true);
+                                            //alert("respuesta *"+respuesta+"*");
+                                            if (respuesta === 1){
+                                                $("#barra_de_progreso").val(100);
+                                                mostrarRespuesta('El archivo ha sido subido correctamente.', true);
+                                            } else {
+                                                mostrarRespuesta('El archivo NO se ha podido subir.', false);
+                                            }
+////mostrarArchivos();
+                                        }, function(progreso, valor){
+                                            valor = valor - 5;
+                                            $("#barra_de_progreso").val(valor);
+                                        });                                    
+                                }
+                            }
+
+                            function mostrarRespuesta(mensaje, ok){
+                                $("#respuesta").removeClass('alert-success').removeClass('alert-danger').html(mensaje);
+                                if(ok){
+                                    $("#respuesta").addClass('alert-success');
+                                }else{
+                                    $("#respuesta").addClass('alert-danger');
+                                }
+                            }
+
+
+                            function validar_control_file(){
+                                f = document.getElementById("archivo");
+                                var extenciones_permitidas = ['jpg','jpeg','png'];
+                                valido = true;
+                                valido = control_file_validar_tipo_de_archivo(f, extenciones_permitidas);   //alert("valido *"+valido+"*");
+                                if(valido == true){
+                                    $("#archivo").removeClass("border-danger");
+                                    $('#error_archivo').css('display', 'none');                                                            
+                                }else{
+                                    $("#archivo").addClass("border-danger");
+                                    $('#error_archivo').css('display', 'block');
+                                };
+                                if(valido == true){
+                                    valido = control_file_validar_tamano(f);    
+                                    if(valido == true){
+                                        $("#archivo").removeClass("border-danger");
+                                        $('#error_archivo_2').css('display', 'none');                                                            
+                                    }else{
+                                        $("#archivo").addClass("border-danger");
+                                        $('#error_archivo_2').css('display', 'block');
+                                    };
+                                }
+                                //if(valido==false){f.value='';}
+                                return valido;
+                            }
+
+                            //extenciones_permitidas = ['gif','jpg','jpeg','png','bmp'];
+                            function control_file_validar_tipo_de_archivo(f, extenciones_permitidas){
+                                    var v=f.value.split('.').pop().toLowerCase();
+                                    for(var i=0,n;n=extenciones_permitidas[i];i++){
+                                        if(n.toLowerCase()==v)
+                                            return true
+                                    }
+                                    var t=f.cloneNode(true);
+                                    t.value='';
+                                    f.parentNode.replaceChild(t,f);
+                                    return false;
+                            }
+                            //el tamano_maximo_permitido se carga con el valor colocado en la propiedad size del control
+                            function control_file_validar_tamano(f){
+                                    var sizeByte = f.files[0].size;
+                                    var siezekiloByte = parseInt(sizeByte / 1024);
+                                    var tamano_maximo_permitido = f.size;
+                                    if( siezekiloByte > tamano_maximo_permitido ){ return false; }
+                                    else{ return true; }
+                            }
                             
                         </script>
 
@@ -240,17 +323,23 @@
                             'name' => 'form_principal',
                             'id' => 'form_principal',
                             'onsubmit' => 'return valida(this)',
-                            'role' => 'form'
-                            //'enctype' => 'multipart/form-data'
+                            'role' => 'form',
+                            'enctype' => 'multipart/form-data'
                         );
                         ?>
                         <?php echo form_open('Inv_articulo/'.$oper_g, $atributos2);
 
                         if($oper == 'editar'){ ?>
                             <input type="hidden" id="id" name="id" value="<?php if( isset($fila_registro->id) ){ echo $fila_registro->id; } ?>" ><?php
-                        } ?>
+                        } else { ?>
+                        
+                            <input type="hidden" id="id" name="id" value="5" ><?php
+                        }
+                        ?>
                         <input type="hidden" id="nombre_conflicto" name="cedula_conflicto" value="false">
                         <input type="hidden" id="codigo_conflicto" name="codigo_conflicto" value="false">
+                        <!-- <input type="hidden" id="id" name="id" value="<?php if( isset($id) ){ echo $id; } ?>" > -->
+                        <!-- <input type="hidden" id="id" name="id" value="14662" > -->
 
                         
                         <div class="row">
@@ -291,14 +380,15 @@
                             <div class="col-md-6 float-left">
                                 <label>Tipo de Artículo <span style="color:#F00;">*</span></label>
                                 <br />
-                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_tipo_articulo" name="id_tipo_articulo" data-show-subtext="true" data-live-search="true"><?php
+                                <select class="form-control" id="id_tipo_articulo" name="id_tipo_articulo" data-show-subtext="true" data-live-search="true"><?php
                                     $valorSel  = $fila_registro->id_tipo_articulo;
-                                    ?><option value="null">Seleccione</option><?php
-                                    for($j = 0; $j < count($matriz_tipo_articulos); $j++){
+                                    ?>
+                                <option value="null">Seleccione</option><?php
+                                for($j = 0; $j < count($matriz_tipo_articulos); $j++){
                                         $valor_a_mostrar = $matriz_tipo_articulos[$j]->nombre;
                                         $valor = $matriz_tipo_articulos[$j]->id;  ?>
                                         <option value="<?php echo $valor; ?>" <?php if($valor == $valorSel){echo "selected";} ?>><?php echo $valor_a_mostrar; ?></option><?php
-                                    }?>
+                                }?>
                                 </select>
                                 <span id="error_id_tipo_articulo" style="display: none" class="text-danger error-camp">
                                     <i class="fa fa-exclamation-circle fa-2x"></i>
@@ -308,7 +398,7 @@
                             <div class="col-md-6 float-left">
                                 <label>Unidad Medida <span style="color:#F00;">*</span></label>
                                 <br />
-                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_unidad_medida" name="id_unidad_medida" data-show-subtext="true" data-live-search="true"><?php
+                                <select class="form-control" id="id_unidad_medida" name="id_unidad_medida" data-show-subtext="true" data-live-search="true"><?php
                                     $valorSel  = $fila_registro->id_unidad_medida;
                                     ?><option value="null">Seleccione</option><?php
                                     for($j = 0; $j < count($matriz_unidades); $j++){
@@ -345,6 +435,42 @@
                                 <textarea class="form-control"  id="observacion" name="observacion" size="255" maxlength="255"> <?php if( isset($fila_registro->observacion) ){ echo $fila_registro->observacion; } ?> </textarea>
 
                             </div>
+
+                            <div class="col-md-12 container-fluid">
+                                    <label>Subir imagen <span style="color:#F00;">*</span></label>
+                                    <br />
+                                    <input type="file" name="archivo" id="archivo"  size="3000" onchange="validar_control_file()" />
+                                    <span style='font-size:smaller'>Formatos aceptados.: jpg, jpeg, png.</span>
+                                    <span id="error_archivo" style="display: none" class="text-danger error-camp">
+                                        <i class="fa fa-exclamation-circle fa-2x"></i>
+                                        El formato no es válido
+                                    </span>
+                                    <span id="error_archivo_2" style="display: none" class="text-danger error-camp">
+                                        <i class="fa fa-exclamation-circle fa-2x"></i>
+                                        El peso del archivo supera el limite permitido
+                                    </span>
+                                </div>
+                                <div class="col-md-8 float-left">
+                                    <div id="respuesta" class="alert"></div>
+                                </div>
+                            </div>   
+                            
+                            <!-- <div class="col-md-12 container-fluid">
+                                <div class="col-md-4 float-left">
+                                    <!--input class="btn btn-outline-sigalsx4-purpple" type="submit" name="Guardar" value="Guardar"-->
+                                    <!-- <a href="#" onclick="subirArchivos()">
+                                        <button type="button" class="btn btn-outline-sigalsx4-purpple">Subir</button>
+                                    </a>                             
+                                </div>
+                                <div class="col-md-6 float-left">
+                                    <progress id="barra_de_progreso" value="0" max="100"></progress>                               
+                                </div>                                 -->
+                            <!-- </div> -->
+                            <div class="row mt-4">
+                                <div class="col-md-2 float-left">
+                                    <div id="archivos_subidos"></div>                        
+                                </div>
+                            </div>
                             
                             <div class="col-md-6  text-center mt-3"><?php  
                                 if($oper != 'agregar'){
@@ -358,19 +484,20 @@
                                     } ?>
                                     <img src="<?php echo $ruta; ?>"  width="150" height="150" border="2px">                                
                                     <br /><br />
-                                    <a href="<?=site_url('Inv_articulo/subir_archivo/').$fila_registro->id; ?>">
+                                    <!-- <a href="<?=site_url('Inv_articulo/subir_archivo/').$fila_registro->id; ?>">
                                         <button type="button" class="btn btn-outline-secondary">Cambiar Imagen</button>
-                                    </a>
+                                    </a> -->
                                     <?php                                    
                                 } ?>
                             </div>
                         </div>                            
                             
-                        <div class="row mt-4">
+                        <div class="col-md-12 container-fluid">
                             <div class="col-md-6 float-left">
                                 <input class="btn btn-secondary" type="submit" name="Guardar" value="Guardar">
                             </div>
                         </div>
+                        <div class="col-md-12 container-fluid"></div>    
                         
                         <?php echo form_close(); ?>
                     </div>

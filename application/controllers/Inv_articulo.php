@@ -150,11 +150,18 @@ class Inv_articulo extends Controlador_padre {
             $data['matriz_tipo_articulos'] = $matriz_tipo_articulos;
 
             $data['oper'] = "agregar";
+            
             $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('plantilla/menu');
             $this->load->view('inv_articulo/v_inv_articulo_frm', $data);
-            $this->load->view('plantilla/footer');                
+            $this->load->view('plantilla/footer');       
+            
+            //necesarios para subir archivo
+            $this->load->view('plantilla/b_footer_llamados');
+            $this->load->view('personal_ivic/v_footer_llamados');
+            $this->load->view('personal_ivic/ajax_archivos');
+            $this->load->view('plantilla/b_footer_cierre');
         }else{
             $this->session->sess_destroy('username');
             $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
@@ -194,6 +201,7 @@ class Inv_articulo extends Controlador_padre {
             if($valido == true){
                     $id = $this->Inv_articulo_model->inv_articulo_insertar($codigo,$nombre,$id_unidad_medida,$id_tipo_articulo,$observacion);
                     if ($id > 0){
+                        $this->get_subir_archivo($id);
                         $mensaje = "Inserto en artículo con id ".$id;
                         $mensaje_2 = "Inserto el artículo ".$nombre;
                         $s_mensaje = array(
@@ -202,8 +210,8 @@ class Inv_articulo extends Controlador_padre {
                         );
                         $this->session->set_userdata($s_mensaje);
                         $this->insertar_bitacora_2("inv_articulo", $mensaje, $mensaje_2);
-                        //redirect('inv_articulo/listar/cargo_ultima_pagina');
-                        redirect('Inv_articulo/subir_archivo/'.$id);
+                        redirect('inv_articulo/listar/cargo_ultima_pagina');
+                        //redirect('Inv_articulo/subir_archivo/'.$id);
                     }else{
                         redirect('inv_articulo/agregar');
                     }                    
@@ -250,6 +258,13 @@ class Inv_articulo extends Controlador_padre {
             $this->load->view('plantilla/menu');
             $this->load->view('inv_articulo/v_inv_articulo_frm', $data);
             $this->load->view('plantilla/footer');
+
+            //necesarios para subir archivo
+            $this->load->view('plantilla/b_footer_llamados');
+            $this->load->view('personal_ivic/v_footer_llamados');
+            $this->load->view('personal_ivic/ajax_archivos');
+            $this->load->view('plantilla/b_footer_cierre');
+
         }else{
             $this->session->sess_destroy('username');
             $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
@@ -274,7 +289,7 @@ class Inv_articulo extends Controlador_padre {
             $this->load->view('plantilla/header', $data);
             $this->load->view('plantilla/menu');
             
-            $this->load->view('inv_articulo/v_inv_articulo_subir_archivos.php', $data);
+           $this->load->view('inv_articulo/v_inv_articulo_subir_archivos.php', $data);
             $this->load->view('plantilla/b_footer_llamados');
             $this->load->view('personal_ivic/v_footer_llamados');
             $this->load->view('personal_ivic/ajax_archivos');
@@ -290,8 +305,8 @@ class Inv_articulo extends Controlador_padre {
         }
     }
 
-    public function get_subir_archivo(){
-        $id = $this->input->post('id');
+    public function get_subir_archivo($id){
+        //$id = $this->input->post('id');
 
 
         $matriz_articulo = $this->Inv_articulo_model->inv_articulo_buscar_2($id);
@@ -355,6 +370,7 @@ class Inv_articulo extends Controlador_padre {
             if($valido == true){
                 $oper_realizada = $this->Inv_articulo_model->inv_articulo_editar($id, $codigo, $nombre, $id_unidad_medida,$id_tipo_articulo,$observacion,$imagen_articulo);
                 //echo "oper_realizada *".$oper_realizada."*";
+                $this->get_subir_archivo($id);
                 if ($oper_realizada){
                     $mensaje = "Actualizó el artículo con id ".$id;
                     $mensaje_2 = "Actualizó el Artículo ".$nombre;

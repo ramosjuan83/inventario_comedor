@@ -93,9 +93,6 @@
                                         });                                    
                                 }
                             }
-                            function cancelar(){
-                                window.location.href='/ivic_sistema_integral/index.php/Inv_articulo/listar/cargo_ultima_pagina';        
-                            }
                             function mostrarRespuesta(mensaje, ok){
                                 $("#respuesta").removeClass('alert-success').removeClass('alert-danger').html(mensaje);
                                 if(ok){
@@ -195,9 +192,6 @@
                                     <!--input class="btn btn-outline-sigalsx4-purpple" type="submit" name="Guardar" value="Guardar"-->
                                     <a href="#" onclick="subirArchivos()">
                                         <button type="button" class="btn btn-outline-sigalsx4-purpple">Subir</button>
-                                    </a>    
-                                    <a href="#" onclick="cancelar()">
-                                        <button type="button" class="btn btn-outline-sigalsx4-purpple">Salir</button>
                                     </a>                                
                                 </div>
                                 <div class="col-md-6 float-left">
