@@ -57,10 +57,10 @@ $fila++;
 // $fila++;
 
 
-$sheet->setCellValue("A".$fila, "Tipo de artículo");
-$sheet->setCellValue("B".$fila, "Nombre de artículo");
-$sheet->setCellValue("C".$fila, "Disponibilidad");
-$sheet->setCellValue("D".$fila, "Fecha Ingreso");
+// $sheet->setCellValue("A".$fila, "Tipo de artículo");
+// $sheet->setCellValue("B".$fila, "Nombre de artículo");
+// $sheet->setCellValue("C".$fila, "Disponibilidad");
+// $sheet->setCellValue("D".$fila, "Fecha Ingreso");
 //$sheet->setCellValue("E".$fila, "MERMA");
 
 // $this->Cell(60, 4, $this->ajuste_texto("Tipo de artículo"), 0, 0, 'C', true);                
@@ -94,6 +94,13 @@ if($matriz_articulos != false){
 
             $sheet->setCellValue("B".$fila, ajuste_texto($nombre_almacen));
             $sheet->getStyle('B'.$fila)->getFont()->setBold(true)->setSize(12);
+            $fila++;
+
+            
+            $sheet->setCellValue("A".$fila, "Tipo de artículo");
+            $sheet->setCellValue("B".$fila, "Nombre de artículo");
+            $sheet->setCellValue("C".$fila, "Disponibilidad");
+            $sheet->setCellValue("D".$fila, "Fecha Ingreso");
             $fila++;
 
         }

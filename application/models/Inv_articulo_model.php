@@ -260,7 +260,7 @@ class Inv_articulo_model extends CI_Model{
         // echo "where".$where;
         // phpinfo();
     
-            $sql = "SELECT m_inv.id_articulo,m_inv.id_almacen,m_inv.fecha as fecha_aux,ar.nombre as nombre_articulo,date_format(m_inv.fecha,'%d/%m/%y') as fecha,al.nombre as nombre_almacen,inv.capacidad_almacen,tar.nombre as nombre_tipo_articulo, und.nombre as unidad_medida 
+            $sql = "SELECT m_inv.id_articulo,m_inv.id_almacen,m_inv.fecha as fecha_aux,ar.nombre as nombre_articulo,date_format(m_inv.fecha,'%d/%m/%Y') as fecha,al.nombre as nombre_almacen,inv.capacidad_almacen,tar.nombre as nombre_tipo_articulo, und.nombre as unidad_medida 
                     FROM inv_movimiento_inventario m_inv 
                     INNER JOIN inv_articulo ar ON ar.id=m_inv.id_articulo
                     INNER JOIN inv_unidad_medida und ON und.id=ar.id_unidad_medida

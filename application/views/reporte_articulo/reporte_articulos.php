@@ -52,16 +52,16 @@ class PDF extends PDF_MC_Table
                 $this->MultiCell(260, $altura, $this->ajuste_texto($this->titulo2), 0, 'C');
                 $this->Ln();
 
-                $this->SetTextColor(255,255,255);  // Establece el color del texto (en este caso es blanco)
-                $this->SetFillColor(31, 116, 175);  // Establece el color del fondo de la celda                
-                $this->SetFont('Arial','B',8);
-                //$this->Cell(8, 4, $this->ajuste_texto("ID"), 0, 0, 'L', true);
-                $this->Cell(60, 4, $this->ajuste_texto("Tipo de artículo"), 0, 0, 'C', true);                
-                $this->Cell(60, 4, $this->ajuste_texto("Nombre de artículo"), 0, 0, 'C', true);
-                $this->Cell(60, 4, $this->ajuste_texto("Disponibilidad"), 0, 0, 'C', true);
-                // $this->Cell(60, 4, $this->ajuste_texto("Almacén"), 0, 0, 'C', true);
-                $this->Cell(60, 4, $this->ajuste_texto("Fecha Ingreso"), 0, 0, 'C', true);
-                $this->Ln();
+                // $this->SetTextColor(255,255,255);  // Establece el color del texto (en este caso es blanco)
+                // $this->SetFillColor(31, 116, 175);  // Establece el color del fondo de la celda                
+                // $this->SetFont('Arial','B',8);
+                // //$this->Cell(8, 4, $this->ajuste_texto("ID"), 0, 0, 'L', true);
+                // $this->Cell(60, 4, $this->ajuste_texto("Tipo de artículo"), 0, 0, 'C', true);                
+                // $this->Cell(60, 4, $this->ajuste_texto("Nombre de artículo"), 0, 0, 'C', true);
+                // $this->Cell(60, 4, $this->ajuste_texto("Disponibilidad"), 0, 0, 'C', true);
+                // // $this->Cell(60, 4, $this->ajuste_texto("Almacén"), 0, 0, 'C', true);
+                // $this->Cell(60, 4, $this->ajuste_texto("Fecha Ingreso"), 0, 0, 'C', true);
+                // $this->Ln();
 	}
         function Footer() //pie de pagina
         {
@@ -251,7 +251,19 @@ if($matriz_articulos != false){
             if($rowspan==1){
                 $pdf->SetFont('Arial','B',10); 
                 $pdf->SetFillColor(192,192,192);
-                $pdf->Cell(240, 5,$rowspan==1?$pdf->ajuste_texto($nombre_almacen):'', 1, 1, 'C', true);  
+                $pdf->Cell(240, 5,$rowspan==1?$pdf->ajuste_texto($nombre_almacen):'', 1, 1, 'C', true); 
+                
+                $pdf->SetFillColor(192, 192, 192);  // Establece el color del fondo de la celda    
+                $pdf->SetTextColor(57, 62, 83); 
+
+                $pdf->SetFont('Arial','B',8);
+                //$pdf->Cell(8, 4, $pdf->ajuste_texto("ID"), 0, 0, 'L', true);
+                $pdf->Cell(60, 4, $pdf->ajuste_texto("Tipo de artículo"), 0, 0, 'C', true);                
+                $pdf->Cell(60, 4, $pdf->ajuste_texto("Nombre de artículo"), 0, 0, 'C', true);
+                $pdf->Cell(60, 4, $pdf->ajuste_texto("Disponibilidad"), 0, 0, 'C', true);
+                // $pdf->Cell(60, 4, $pdf->ajuste_texto("Almacén"), 0, 0, 'C', true);
+                $pdf->Cell(60, 4, $pdf->ajuste_texto("Fecha Ingreso"), 0, 0, 'C', true);
+                $pdf->Ln();
             }
 
             $pdf->SetFont('Arial','',8);  
