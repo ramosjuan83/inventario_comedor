@@ -77,13 +77,7 @@
                 todayHighlight: true,
                 pick12HourFormat: true,
                 language: "es"
-            }); 
-            $('#fecha_vencimiento').datepicker({
-                format: 'dd/mm/yyyy',
-                todayHighlight: true,
-                pick12HourFormat: true,
-                language: "es"
-            });             
+            });            
             $('#fecha_de_pago').datepicker({
                 format: 'dd/mm/yyyy',
                 todayHighlight: true,
@@ -107,5 +101,5 @@
             $('#datepicker-example').datepicker({
                 format: 'dd/mm/yyyy'
                 , language: "es"
-            });     
+            });       
         </script>

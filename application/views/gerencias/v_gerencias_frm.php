@@ -27,6 +27,7 @@
                             function valida(f){
                                 var ok = true;
 
+
                                 if(document.getElementById("nombre").value.length < 1)
                                 {
                                     $("#nombre").addClass("border-danger");
@@ -36,21 +37,16 @@
                                     $("#nombre").removeClass("border-danger");
                                     $('#error_nombre').css('display', 'none');
                                 };
-                                /*
-                                if(ok == true){
-                                    $("#nombre").removeClass("border-danger");
-                                    $('#error_nombre_2').css('display', 'none');
-                                    if(document.getElementById("nombre").value.length < 1){
-                                    }else{
-                                        if(soloNumero.test(document.getElementById("cedula").value) ) {
-                                        }else{
-                                            $("#nombre").addClass("border-danger");
-                                            $('#error_nombre_2').css('display', 'block');
-                                            ok = false;
-                                        }
 
-                                    };                                    
-                                } */
+                                if(document.getElementById("id_gerencia_2").value == 'null')
+                                {
+                                    $("#id_gerencia_2").addClass("border-danger");
+                                    $('#error_id_gerencia_2').css('display', 'block');
+                                    ok = false;
+                                }else{
+                                    $("#id_gerencia_2").removeClass("border-danger");
+                                    $('#error_id_gerencia_2').css('display', 'none');
+                                };
 
                                 if(ok == true){
                                     nombre_conflicto = document.getElementById("nombre_conflicto").value;
@@ -60,29 +56,14 @@
                                     }else{
                                         $('#error_nombre_2').css('display', 'none');
                                     }
-                                }
-/*                                
-                                if(document.getElementById("nombres").value.length < 1)
-                                {
-                                    $("#nombres").addClass("border-danger");
-                                    $('#error_nombres').css('display', 'block');
-                                    ok = false;
-                                }else{
-                                    $("#nombres").removeClass("border-danger");
-                                    $('#error_nombres').css('display', 'none');
-                                };
-                             
-
-*/
-                                
-                               
+                                } 
 
                                 if(ok == false){
                                     $('.alert-error-campo').css('display', 'block');
-                                    return ok;
                                 }else{
                                     $('.alert-error-campo').css('display', 'none');
                                 }
+                                return ok;
                             };
 
                             function valida_nombre(oper){
@@ -159,9 +140,30 @@
                         if($oper == 'editar'){ ?>
                             <input type="hidden" id="id" name="id" value="<?php if( isset($fila_registro->id) ){ echo $fila_registro->id; } ?>" ><?php
                         } ?>
-                        <input type="hidden" id="nombre_conflicto" name="cedula_conflicto" value="false">
+                        <input type="hidden" id="nombre_conflicto" name="nombre_conflicto" value="false">
 
                         <div class="row">
+                            <div class="col-md-6">
+                                <label for="comedor_comida_tipo_id_2">Gerencia <span style="color:#F00;">*</span></label>
+                                <select class="form-control selectpicker" id="id_gerencia_2" name="id_gerencia_2" data-show-subtext="true" data-live-search="true"><?php
+                                    if(isset($fila_registro->id_gerencia_2)){ $valorSel  = $fila_registro->id_gerencia_2; }else{ $valorSel = ""; }
+                                    ?><option value="null">Seleccione</option><?php
+                                    for($j = 0; $j < count($matriz_gerencias_2); $j++){
+                                        $valor_a_mostrar = $matriz_gerencias_2[$j]->nombre;
+                                        $valor = $matriz_gerencias_2[$j]->id;  ?>
+                                        <option value="<?php echo $valor; ?>" <?php if($valor == $valorSel){echo "selected";} ?>><?php echo $valor_a_mostrar; ?></option><?php
+                                    }
+                                    ?>
+                                </select>
+                                <span id="error_id_gerencia_2" style="display: none" class="text-danger error-camp">
+                                    <i class="fa fa-exclamation-circle fa-2x"></i> 
+                                    Seleccione el campo
+                                </span>
+                            </div>                                                    
+                        </div>
+
+                        
+                        <div class="row mt-3">
                             <div class="col-md-12 container-fluid">
                                         <label>Nombre <span style="color:#F00;">*</span></label>
                                         <br />
@@ -177,24 +179,6 @@
                                             <i class="fa fa-exclamation-circle fa-2x"></i>
                                             El valor del campo, ya existe
                                         </span>
-                            </div>
-                            <div class="col-md-6  text-center mt-3"><?php  
-                                if($oper != 'agregar'){
-
-                                } 
-                                /*
-                                if($oper == 'editar'){
-                                    if( $fila_registro->imagen_nombre == "" ){ 
-                                        $ruta = base_url("images/personal_visitante/")."sin_imagen.png";
-                                    }else{ 
-                                        $ruta = base_url("images/personal_visitante/").$fila_registro->imagen_nombre;                                     
-                                    } ?>
-                                    <img src="<?php echo $ruta; ?>"  width="150" height="150" border="2px">                                
-                                    <br /><br />
-                                    <a href="<?=site_url('Gerencias/subir_archivo/').$fila_registro->id; ?>">
-                                        <button type="button" class="btn btn-outline-sigalsx4-purpple">cambiar imagen</button>
-                                    </a><?php                                    
-                                } */?>
                             </div>
                         </div>                            
                             

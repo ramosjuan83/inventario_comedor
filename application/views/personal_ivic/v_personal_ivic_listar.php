@@ -15,7 +15,6 @@
             </div>
             <div class="col-md-6 float-left text-right container-fluid mt-2">
                 <?php
-
                 if( strlen($this->session->userdata('personal_ivic_mensaje_tipo')) > 0  ){ ?>
                         <div class="alert <?php echo $this->session->userdata('personal_ivic_mensaje_tipo'); ?> text-center"><?php
                             echo $this->session->userdata('personal_ivic_mensaje_contenido'); ?>
@@ -111,7 +110,7 @@
                         </a> 
                     </div>
                 </div>
-            </div> 
+            </div>
             
             <div class="row">
                 <div class="col-md-12">
@@ -209,7 +208,7 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
 
             <?php /*
             <form class="form-inline" action="listar" name="form_busqueda" id="form_busqueda" target="_self" enctype="multipart/form-data" method="POST">
@@ -286,6 +285,10 @@
                                         } ?>
                                     </td>
                                     <td>
+                                        <?php /*
+                                        <a class="text_azul mr-2" href="<?=site_url('pagos/subir_archivo/'.$dat->pagos_id.'/'.$menu_origen)?>">
+                                            <span data-toggle="tooltip" data-placement="left" title="Documentos"><i class="fa-regular fa-folder-open"></i>(<?php echo $dat->num_fotos; ?>)</span>
+                                        </a>*/ ?>
                                         
                                         <a class="text_azul mr-2" href="<?=site_url('personal_ivic/editar/'.$dat->id)?>">
                                             <span data-toggle="tooltip" data-placement="left" title="Editar"><i class="far fa-edit"></i></span>

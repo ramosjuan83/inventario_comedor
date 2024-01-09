@@ -95,6 +95,7 @@
                         <tr class="text-center">
                             <th scope="col">ID</th>
                             <th scope="col" class="text-left">NOMBRE</th>
+                            <th scope="col" class="text-left">GERENCIA</th>
                             <th scope="col">ACCIONES</th>
                         </tr>
                     </thead>
@@ -102,11 +103,12 @@
                     if($dat_list != false){
                             foreach ($dat_list as $dat) {   ?>
                                 <tr class="text-center">
-                                    <th scope="row"><?=$dat->id?></th>
-                                    <td class="text-left"><?=$dat->nombre?></td>
+                                    <th scope="row"><?=$dat->gerencias_id?></th>
+                                    <td class="text-left"><?=$dat->gerencias_nombre?></td>
+                                    <td class="text-left"><?=$dat->gerencias_2_nombre?></td>
                                     <td>
                                         
-                                        <a class="text_azul mr-2" href="<?=site_url('Gerencias/editar/'.$dat->id)?>">
+                                        <a class="text_azul mr-2" href="<?=site_url('Gerencias/editar/'.$dat->gerencias_id)?>">
                                             <span data-toggle="tooltip" data-placement="left" title="Editar"><i class="far fa-edit"></i></span>
                                         </a>
                                         
@@ -114,12 +116,12 @@
                                         if($dat->esta_asociado_en_personal_ivic == true){ ?>
                                             <span class="text-secondary mr-2" data-toggle="tooltip" data-placement="left" title="Eliminar (No puede eliminar, se encuentra asociado con un personal del IVIC)"><i class="fas fa-trash-alt"></i></span><?php
                                         }else{ ?>
-                                            <a class="text-danger mr-2" href="#" data-toggle="modal" data-target="#exampleModal<?php echo $dat->id; ?>">
+                                            <a class="text-danger mr-2" href="#" data-toggle="modal" data-target="#exampleModal<?php echo $dat->gerencias_id; ?>">
                                                 <span data-toggle="tooltip" data-placement="left" title="Eliminar"><i class="fas fa-trash-alt"></i></span>
                                             </a><?php
                                         } ?>
                                             
-                                        <div class="modal fade" id="exampleModal<?php echo $dat->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="exampleModal<?php echo $dat->gerencias_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                               <div class="modal-header">
@@ -133,7 +135,7 @@
                                               </div-->
                                               <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                <a href="<?php echo site_url('Gerencias/eliminar/'.$dat->id); ?>">
+                                                <a href="<?php echo site_url('Gerencias/eliminar/'.$dat->gerencias_id); ?>">
                                                     <button type="button" class="btn btn-primary">Aceptar</button>
                                                 </a>
                                               </div>

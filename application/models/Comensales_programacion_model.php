@@ -126,13 +126,16 @@ class Comensales_programacion_model extends CI_Model{
     public function comensales_programacion_buscar_3($fecha, $hora, $estatus_2){
             $sql = "SELECT * FROM comensales_programacion
                     WHERE
+                        ( 
                             fecha < '".$fecha."'
-                        OR (
-                                fecha = '".$fecha."'
-                            AND hora <= '".$hora."'
-                        ) 
+                            OR (
+                                    fecha = '".$fecha."'
+                                AND hora <= '".$hora."'
+                            ) 
+                        )
                         AND estatus_2 = '".$estatus_2."'
-                    ";      //echo "<br />sql *".$sql."*";
+                    ";      
+//                    echo "<br />sql *".$sql."*";
             $resultado = $this->db->query($sql);
             if( $resultado->num_rows() > 0 ){
                 return $resultado->result();

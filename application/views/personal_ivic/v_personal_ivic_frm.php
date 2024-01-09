@@ -242,7 +242,61 @@
                                             }
                                     });                                    
                                 }
+                            } 
+                            
+                            function carga_id_gerencia(){
+                                id_gerencia_2 = document.getElementById("id_gerencia_2").value;
+                                
+                                if(id_gerencia_2 == "null"){
+                                    $('#id_gerencia').html('');
+                                    $('#id_departamento').html('');
+                                }
+
+                                var baseurl = "<?php echo base_url(); ?>";
+                                $.post(baseurl+"index.php/Gerencias/get_gerencias_buscar_7",
+                                {
+                                        id_gerencia_2: id_gerencia_2
+                                },
+                                function(data){ //alert(data); //[{"id":"1","id_gerencia_2":"1","nombre":"AUDITORIA INTERNA"},{"id":"2","id_gerencia_2":"1","nombre":"DIRECCI\u00d3N"},{"id":"3","id_gerencia_2":"1","nombre":"OFICINA DE ATENCI\u00d3N AL CIUDADANO"}]
+                                        var matriz_gerencia = JSON.parse(data); //convierto el valor devuelto a una matris
+                                        $('#id_gerencia').html('');
+                                        //alert("PASO2");
+                                        $('#id_gerencia').append('<option value="null">Seleccione</option>');
+                                        $.each(matriz_gerencia, function(i, item){
+                                                $('#id_gerencia').append('<option value="'+item.id+'">'+item.nombre+'</option>');
+                                        });
+                                }); 
+                                
+                                carga_id_departamento();
+                                //carga_los_periodos();
+
+                            }   
+                            function carga_id_departamento(){
+                                id_gerencia = document.getElementById("id_gerencia").value;
+
+                                var baseurl = "<?php echo base_url(); ?>";
+                                $.post(baseurl+"index.php/Departamento/get_departamento_buscar_7",
+                                {
+                                        id_gerencia: id_gerencia
+                                },
+                                function(data){ //alert(data); //[{"id":"23","id_gerencia":"6","nombre":"CONSULTOR\u00cdA JUR\u00cdDICA"},{"id":"24","id_gerencia":"6","nombre":"COORDINACI\u00d3N DE ASUNTOS JUDICIALES"},{"id":"25","id_gerencia":"6","nombre":"COORDINACI\u00d3N DE DICT\u00c1MENES Y OPINIONES"},{"id":"26","id_gerencia":"6","nombre":"COORDINACI\u00d3N DE ASUNTOS NORMATIVOS, CONTRATOS Y CONVENIOS"}]
+                                        //if(data != "false"){
+                                            var matriz_departamento = JSON.parse(data); //convierto el valor devuelto a una matris
+                                            $('#id_departamento').html('');
+                                            //alert("PASO2");
+                                            $('#id_departamento').append('<option value="null">Seleccione</option>');
+                                            $.each(matriz_departamento, function(i, item){
+                                                    $('#id_departamento').append('<option value="'+item.id+'">'+item.nombre+'</option>');
+                                            });
+                                        //}
+
+                                }); 
+                                
+                                //carga_asignaturas_ofertadas();
+                                //carga_los_periodos();
+
                             }                            
+                            
                             
                         </script>
 
@@ -435,10 +489,10 @@
                         <div class="card mt-3">
                             <div class="card-body">
                                 <div class="row ">
-                                    <div class="col-md-4 float-left mt-2">
+                                    <div class="col-md-4 float-left">
                                         <label>Gerencia <span style="color:#F00;">*</span></label>
                                         <br />
-                                        <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_gerencia_2" name="id_gerencia_2" data-show-subtext="true" data-live-search="true"><?php
+                                        <select class="form-control" id="id_gerencia_2" name="id_gerencia_2" data-show-subtext="true" data-live-search="true"  onChange="carga_id_gerencia()"><?php
                                             $valorSel  = $fila_personal->id_gerencia_2;
                                             ?><option value="null">Seleccione</option><?php
                                             for($j = 0; $j < count($matriz_gerencias_2); $j++){
@@ -453,17 +507,17 @@
                                         </span>
                                     </div>                            
 
-                                    <div class="col-md-4 float-left  mt-2">
+                                    <div class="col-md-4 float-left">
                                         <label>Centro <span style="color:#F00;">*</span></label>
-                                        <br />
-                                        <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_gerencia" name="id_gerencia" data-show-subtext="true" data-live-search="true"><?php
+                                        <select class="form-control" id="id_gerencia" name="id_gerencia" data-show-subtext="true" data-live-search="true" onchange="carga_id_departamento()">
+                                            <?php
                                             $valorSel  = $fila_personal->id_gerencia;
                                             ?><option value="null">Seleccione</option><?php
                                             for($j = 0; $j < count($matriz_gerencias); $j++){
-                                                $valor_a_mostrar = $matriz_gerencias[$j]->nombre;
+                                                $valor_a_mostrar = strtoupper($matriz_gerencias[$j]->nombre);
                                                 $valor = $matriz_gerencias[$j]->id;  ?>
                                                 <option value="<?php echo $valor; ?>" <?php if($valor == $valorSel){echo "selected";} ?>><?php echo $valor_a_mostrar; ?></option><?php
-                                            }?>
+                                            } ?>
                                         </select>
                                         <span id="error_gerencia" style="display: none" class="text-danger error-camp">
                                             <i class="fa fa-exclamation-circle fa-2x"></i>
@@ -471,7 +525,26 @@
                                         </span>
                                     </div>
 
-                                    <div class="col-md-4 float-left  mt-2">
+                                    <div class="col-md-4 float-left">
+                                        <label>Coordinación / Unidad <span style="color:#F00;">*</span></label>
+                                        <select class="form-control" id="id_departamento" name="id_departamento" data-show-subtext="true" data-live-search="true">
+                                            <?php
+                                            $valorSel  = $fila_personal->id_departamento;
+                                            ?><option value="null">Seleccione</option><?php
+                                            for($j = 0; $j < count($matriz_departamento); $j++){
+                                                $valor_a_mostrar = $matriz_departamento[$j]->nombre;
+                                                $valor = $matriz_departamento[$j]->id;  ?>
+                                                <option value="<?php echo $valor; ?>" <?php if($valor == $valorSel){echo "selected";} ?>><?php echo $valor_a_mostrar; ?></option><?php
+                                            } ?>
+                                        </select>
+                                        <span id="error_id_departamento" style="display: none" class="text-danger error-camp">
+                                            <i class="fa fa-exclamation-circle fa-2x"></i>
+                                            Campo Vacio
+                                        </span>
+                                    </div>
+                                    
+                                    <?php /*
+                                    <div class="col-md-4 float-left">
                                         <label>Coordinación / Unidad <span style="color:#F00;">*</span></label>
                                         <br />
                                         <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_departamento" name="id_departamento" data-show-subtext="true" data-live-search="true"><?php
@@ -487,7 +560,7 @@
                                             <i class="fa fa-exclamation-circle fa-2x"></i>
                                             Campo Vacio
                                         </span>
-                                    </div>
+                                    </div> */ ?>
                                 </div>
                             </div>
                         </div>

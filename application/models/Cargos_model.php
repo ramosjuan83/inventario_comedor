@@ -61,6 +61,31 @@ class Cargos_model extends CI_Model{
                 return false;
             }
     }
+
+    //cargos
+    //    id
+    //    nombre    
+    public function conf_cargos_buscar_4($b_matriz_id_cargo){
+            $sql = "SELECT * FROM cargos ";
+            if($b_matriz_id_cargo != false){
+                $sql .= " WHERE (";
+                for($i = 0; $i < count($b_matriz_id_cargo); $i++){
+                    if($i == 0){
+                        $sql .= " id = '".$b_matriz_id_cargo[$i]."'";    
+                    }else{
+                        $sql .= " OR id = '".$b_matriz_id_cargo[$i]."'";
+                    }
+                }
+                $sql .= ")";
+            }                
+            $sql .= "ORDER BY nombre ASC";
+            $resultado = $this->db->query($sql);
+            if( $resultado->num_rows() > 0 ){
+                return $resultado->result();
+            }else{
+                return false;
+            }
+    }    
     
     //cargos
     //    id

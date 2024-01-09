@@ -9,6 +9,7 @@ class Departamento extends Controlador_padre {
         $this->load->model('Conf_usuarios_model');
         $this->load->model('Departamento_model');
         $this->load->model('Personal_ivic_model');
+        $this->load->model('Gerencias_model');
     }
 
     public function listar($memoria = 'false'){
@@ -81,11 +82,18 @@ class Departamento extends Controlador_padre {
                 if($segmento > 0){}else{$segmento = 0;} //echo "segmento *".$segmento."*";
                 $this->pagination->initialize($config); //inicializamos la paginación
                 $dat_list = $this->Departamento_model->departamento_buscar($b_texto, $config['per_page'],$segmento);
-//echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";                
+                //echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";                
+                //[0] => stdClass Object
+                //    (
+                //        [departamento_id] => 290
+                //        [departamento_id_gerencia] => 44
+                //        [departamento_nombre] => UNIDAD DE GESTIÓN Y CONTROL DE DESECHOS QUÍMICOS
+                //        [gerencias_nombre] => CENTRO DE QUIMICA
+                //    )                
                 
                 if($dat_list != false){
                     for($i = 0; $i < count($dat_list); $i++){
-                        $departamento_id = $dat_list[$i]->id;  //echo "departamento_id *".$departamento_id."*";
+                        $departamento_id = $dat_list[$i]->departamento_id;  //echo "departamento_id *".$departamento_id."*";
                         unset($matriz_comensales);                        
                         $matriz_personal_ivic = $this->Personal_ivic_model->personal_ivic_buscar_9($departamento_id);
                         if($matriz_personal_ivic == false){
@@ -132,6 +140,10 @@ class Departamento extends Controlador_padre {
         $logged = $this->Conf_usuarios_model->isLogged();
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
         if($logged == TRUE && $id_conf_roles_es_2 == true){
+            
+            $matriz_gerencias = $this->Gerencias_model->gerencias_buscar_4();
+            $data['matriz_gerencias'] = $matriz_gerencias;
+            
             $data['oper'] = "agregar";
             $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
             $this->load->view('plantilla/header', $data);
@@ -151,6 +163,7 @@ class Departamento extends Controlador_padre {
         $logged = $this->Conf_usuarios_model->isLogged();
         if($logged == TRUE){            
             $valor = "nombre";          if ( isset($_POST[$valor])              ){	$nombre = ucfirst( $_POST[$valor] );	}else{	$nombre	= "";	}
+            $valor = "id_gerencia";     if ( isset($_POST[$valor])              ){	$id_gerencia = $_POST[$valor];	}else{	$id_gerencia	= "";	}
 
             $nombre        = $this->convierte_texto($nombre);
 
@@ -169,7 +182,7 @@ class Departamento extends Controlador_padre {
             ////FIN de Valida reg existente
             $valido = true;
             if($valido == true){
-                    $id = $this->Departamento_model->departamento_insertar($nombre);
+                    $id = $this->Departamento_model->departamento_insertar($id_gerencia, $nombre);
                     if ($id > 0){
                         $mensaje = "Inserto el departamento con id ".$id;
                         $mensaje_2 = "Inserto el departamento ".$nombre;
@@ -198,6 +211,8 @@ class Departamento extends Controlador_padre {
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
         if($logged == TRUE && $id_conf_roles_es_2 == true){
 
+            $matriz_gerencias = $this->Gerencias_model->gerencias_buscar_4();
+            $data['matriz_gerencias'] = $matriz_gerencias;            
             
             $fila_reg = $this->Departamento_model->departamento_buscar_2($id);   //echo "<pre>"; print_r($fila_reg); echo "</pre>";
             $data['fila_registro'] = $fila_reg[0]; 
@@ -221,13 +236,14 @@ class Departamento extends Controlador_padre {
         $logged = $this->Conf_usuarios_model->isLogged();
         if($logged == TRUE){
             $valor = "id";              if ( isset($_POST[$valor]) 	){	$id = $_POST[$valor];                   }else{	$id	= "";	}
-            $valor = "nombre";          if ( isset($_POST[$valor])              ){	$nombre = ucfirst( $_POST[$valor] );	}else{	$nombre	= "";	}
+            $valor = "id_gerencia";     if ( isset($_POST[$valor])      ){	$id_gerencia = $_POST[$valor];	}else{	$id_gerencia	= "";	}
+            $valor = "nombre";          if ( isset($_POST[$valor])      ){	$nombre = ucfirst( $_POST[$valor] );	}else{	$nombre	= "";	}
 
             $nombre        = $this->convierte_texto($nombre);
             
             $valido = true;
             if($valido == true){
-                $oper_realizada = $this->Departamento_model->departamento_editar($id, $nombre);
+                $oper_realizada = $this->Departamento_model->departamento_editar($id, $id_gerencia, $nombre);
                 //echo "oper_realizada *".$oper_realizada."*";
                 if ($oper_realizada){
                     $mensaje = "Actualizó el departamento con id ".$id;
@@ -321,6 +337,12 @@ class Departamento extends Controlador_padre {
             $nombre     = $this->input->post('nombre');
             $resultados = $this->Departamento_model->departamento_buscar_6($nombre); //echo "resultados *"; print_r($resultados); echo "*";
             echo json_encode($resultados);
-    }       
+    } 
+    
+    public function get_departamento_buscar_7(){
+            $id_gerencia     = $this->input->post('id_gerencia');
+            $resultados = $this->Departamento_model->departamento_buscar_7($id_gerencia); //echo "resultados *"; print_r($resultados); echo "*";
+            echo json_encode($resultados);
+    }    
     
 }

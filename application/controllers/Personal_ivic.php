@@ -22,12 +22,10 @@ class Personal_ivic extends Controlador_padre {
     }
 
     public function listar($memoria = 'false'){
-        //$matriz_conf_configuracion = $this->Conf_configuracion_model->conf_configuracion_buscar_2();
-        //$nombre_de_archivo_login = $matriz_conf_configuracion['nombre_de_archivo_login'];
-        
-        $logged = $this->Conf_usuarios_model->isLogged();
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
-        if($logged == TRUE && $id_conf_roles_es_2 == true){ 
+        $id_conf_roles_es_6 = $this->session->userdata('id_conf_roles_es_6');
+        $logged = $this->Conf_usuarios_model->isLogged();
+        if($logged == TRUE && ($id_conf_roles_es_2 == true OR $id_conf_roles_es_6 == true)){ 
 
                 if($memoria == 'limpiar'){
                     $this->session->unset_userdata('personal_b_texto');
@@ -61,7 +59,7 @@ class Personal_ivic extends Controlador_padre {
                         if( strlen($this->session->userdata('personal_b_estado')) > 0  ){
                             $b_estado = $this->session->userdata('personal_b_estado');
                         }
-                } 
+                }
                 if($b_estado == 1){
                     $estado = 1;
                 }else{
@@ -94,6 +92,7 @@ class Personal_ivic extends Controlador_padre {
                         }
                 }
                 
+                $b_matriz_id_cargo = $this->carga_b_matriz_id_cargo();
                 
                 if($memoria == 'cargo_ultima_pagina'){
                         $pagina_actual = $this->session->userdata('personal_ultima_pagina');    
@@ -120,7 +119,7 @@ class Personal_ivic extends Controlador_padre {
                 $this->load->library('pagination');
                 $pages = 8; //Número de registros mostrados por páginas
                 $config['base_url'] = base_url().'index.php/personal_ivic/listar/pagina'; // parametro base de la aplicación, si tenemos un .htaccess nos evitamos el index.php
-                $total_rows = $this->Personal_ivic_model->personal_ivic_num_reg($b_texto, $b_id_cargo, $b_id_gerencia, $b_estado);
+                $total_rows = $this->Personal_ivic_model->personal_ivic_num_reg($b_texto, $b_id_cargo, $b_id_gerencia, $b_estado, $b_matriz_id_cargo);
                 $config['total_rows'] = $total_rows;
                 $config['per_page'] = $pages; //Número de registros mostrados por páginas
                 $config['uri_segment'] = 4;
@@ -141,7 +140,7 @@ class Personal_ivic extends Controlador_padre {
                 //$segmento = $this->uri->segment(4);
                 if($segmento > 0){}else{$segmento = 0;} //echo "segmento *".$segmento."*";
                 $this->pagination->initialize($config); //inicializamos la paginación
-                $dat_list = $this->Personal_ivic_model->personal_ivic_buscar($b_texto, $b_id_cargo, $b_id_gerencia, $b_estado, $config['per_page'],$segmento);
+                $dat_list = $this->Personal_ivic_model->personal_ivic_buscar($b_texto, $b_id_cargo, $b_id_gerencia, $b_estado, $b_matriz_id_cargo, $config['per_page'],$segmento);
                 //echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";                
                 //[0] => stdClass Object
                 //    (
@@ -163,8 +162,13 @@ class Personal_ivic extends Controlador_padre {
                         $matriz_cargos = $this->Cargos_model->cargos_buscar_2($dat_list[$i]->id_cargo);
                         $dat_list[$i]->cargos_nombre = $matriz_cargos[0]->nombre;
                         
+                        $gerencia_nombre = "";
+                        unset($matriz_gerencias);
                         $matriz_gerencias = $this->Gerencias_model->gerencias_buscar_2($dat_list[$i]->id_gerencia);
-                        $dat_list[$i]->gerencia_nombre = $matriz_gerencias[0]->nombre;
+                        if($matriz_gerencias != false){
+                            $gerencia_nombre = $matriz_gerencias[0]->nombre;
+                        }
+                        $dat_list[$i]->gerencia_nombre = $gerencia_nombre;
                         
                         $estado_nombre = "";
                         switch ($dat_list[$i]->estado) {
@@ -204,10 +208,8 @@ class Personal_ivic extends Controlador_padre {
                 $dat_list['b_id_gerencia']  = $b_id_gerencia;
                 $dat_list['b_estado']  = $b_estado;
                 
-                
-                
-                
-                $data['matriz_cargos']  = $this->Cargos_model->conf_cargos_buscar_3(); 
+                //$data['matriz_cargos']  = $this->Cargos_model->conf_cargos_buscar_3(); 
+                $data['matriz_cargos']  = $this->Cargos_model->conf_cargos_buscar_4($b_matriz_id_cargo);
                 
                 $data['matriz_gerencias']          = $this->Gerencias_model->conf_gerencias_buscar_3();
                 
@@ -230,10 +232,12 @@ class Personal_ivic extends Controlador_padre {
     }
 
     public function agregar(){
-        $logged = $this->Conf_usuarios_model->isLogged();
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
-        if($logged == TRUE && $id_conf_roles_es_2 == true){
-            $matriz_cargos                     = $this->Cargos_model->conf_cargos_buscar_3();
+        $id_conf_roles_es_6 = $this->session->userdata('id_conf_roles_es_6');
+        $logged = $this->Conf_usuarios_model->isLogged();
+        if($logged == TRUE && ($id_conf_roles_es_2 == true OR $id_conf_roles_es_6 == true)){             
+            $b_matriz_id_cargo = $this->carga_b_matriz_id_cargo();
+            $matriz_cargos                     = $this->Cargos_model->conf_cargos_buscar_4($b_matriz_id_cargo);
             $data['matriz_cargos']             = $matriz_cargos;
             
             $matriz_gerencias                  = $this->Gerencias_model->conf_gerencias_buscar_3();
@@ -289,7 +293,7 @@ class Personal_ivic extends Controlador_padre {
             $cedula         = str_replace(".", "", $cedula);
             $nombres        = $this->convierte_texto($nombres);
             $apellidos      = $this->convierte_texto($apellidos);            
-            if(strlen($fecha_de_ingreso) > 2){     $fecha_de_ingreso = $this->ordena_fecha_3($fecha_de_ingreso);    }            
+            if(strlen($fecha_de_ingreso) > 2){     $fecha_de_ingreso = $this->ordena_fecha_3($fecha_de_ingreso);    }
             
             $imagen_nombre  = $cedula.".jpg";
             /*
@@ -335,11 +339,13 @@ class Personal_ivic extends Controlador_padre {
     }
 
     public function editar($id){
-        $logged = $this->Conf_usuarios_model->isLogged();
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
-        if($logged == TRUE && $id_conf_roles_es_2 == true){
-
-            $matriz_cargos                     = $this->Cargos_model->conf_cargos_buscar_3();
+        $id_conf_roles_es_6 = $this->session->userdata('id_conf_roles_es_6');
+        $logged = $this->Conf_usuarios_model->isLogged();
+        if($logged == TRUE && ($id_conf_roles_es_2 == true OR $id_conf_roles_es_6 == true)){             
+            
+            $b_matriz_id_cargo = $this->carga_b_matriz_id_cargo();
+            $matriz_cargos                     = $this->Cargos_model->conf_cargos_buscar_4($b_matriz_id_cargo);
             $data['matriz_cargos']             = $matriz_cargos;
             
             $matriz_gerencias                  = $this->Gerencias_model->conf_gerencias_buscar_3();
@@ -489,9 +495,10 @@ class Personal_ivic extends Controlador_padre {
     }
 
     public function eliminar($id){
-            $logged = $this->Conf_usuarios_model->isLogged();
             $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
-            if($logged == TRUE && $id_conf_roles_es_2 == true){
+            $id_conf_roles_es_6 = $this->session->userdata('id_conf_roles_es_6');
+            $logged = $this->Conf_usuarios_model->isLogged();
+            if($logged == TRUE && ($id_conf_roles_es_2 == true OR $id_conf_roles_es_6 == true)){
                 
                 $matriz_personal_ivic = $this->Personal_ivic_model->personal_ivic_buscar_2($id);
                 $personal_ivic_nombre = $matriz_personal_ivic[0]->nombres;
@@ -537,7 +544,11 @@ class Personal_ivic extends Controlador_padre {
                 }
                 redirect('personal_ivic/listar/cargo_ultima_pagina');                
             }else{
-                redirect('Login/v_login_mensaje_1');
+                $this->session->sess_destroy('username');
+                $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+                $this->load->view('plantilla/header', $data);
+                $this->load->view('login/v_login_1');
+                $this->load->view('plantilla/footer');
             }
     }
 
@@ -738,7 +749,27 @@ class Personal_ivic extends Controlador_padre {
 //        }        
 //    }    
     
+    public function documentos(){
+        $logged = $this->Conf_usuarios_model->isLogged();
+        if($logged == TRUE){
+            $data['oper'] = "documentos";
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $this->load->view('plantilla/header', $data);
+            $this->load->view('plantilla/menu');
+            $this->load->view('personal_ivic/v_documentos_frm', $data);
+            $this->load->view('plantilla/footer');                
+        }else{
+            $this->session->sess_destroy('username');
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $this->load->view('plantilla/header', $data);
+            $this->load->view('login/v_login_1');
+            $this->load->view('plantilla/footer');
+        }
+    }    
+    
     public function ver_reporte($formato, $b_texto, $b_id_cargo, $b_id_gerencia, $b_estado){
+        $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
+        $id_conf_roles_es_6 = $this->session->userdata('id_conf_roles_es_6');        
         $logged = $this->Conf_usuarios_model->isLogged();
         if($logged == TRUE){
 
@@ -773,6 +804,8 @@ class Personal_ivic extends Controlador_padre {
             }
             $data['b_gerencia_nombre'] = $gerencia_nombre;
             
+            $b_matriz_id_cargo = $this->carga_b_matriz_id_cargo();
+            
             $estado = "";
             $estado_1 = "";
             if($b_estado > 0){
@@ -786,7 +819,7 @@ class Personal_ivic extends Controlador_padre {
             }
             $data['estado_1'] = $estado_1;
             
-            $matriz_personal_ivic = $this->Personal_ivic_model->personal_ivic_buscar($b_texto, $b_id_cargo, $b_id_gerencia, $estado, "", ""); 
+            $matriz_personal_ivic = $this->Personal_ivic_model->personal_ivic_buscar($b_texto, $b_id_cargo, $b_id_gerencia, $estado, $b_matriz_id_cargo, "", ""); 
 
             $data['matriz_personal_ivic'] = $matriz_personal_ivic;
 
@@ -928,6 +961,23 @@ class Personal_ivic extends Controlador_padre {
         }
         return $texto;
     }    
+    
+    private function carga_b_matriz_id_cargo(){
+        $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
+        $id_conf_roles_es_6 = $this->session->userdata('id_conf_roles_es_6');
+        unset($b_matriz_id_cargo);
+        $solo_rol_cea = false;
+        if($id_conf_roles_es_6 == true AND $id_conf_roles_es_2 == false){
+            $solo_rol_cea = true;    
+        }
+        if($solo_rol_cea == true){
+            $b_matriz_id_cargo[0] = 297; //ESTUDIANTE POSTGRADO
+            $b_matriz_id_cargo[1] = 298; //ESTUDIANTE PREGRADO   
+        }else{
+            $b_matriz_id_cargo = false;
+        }
+        return $b_matriz_id_cargo;
+    }    
 
     public function get_personal_ivic_buscar_2(){
             $id     = $this->input->post('id');
@@ -958,7 +1008,7 @@ class Personal_ivic extends Controlador_padre {
     private function ordena_fecha_3($fecha){
             $parte2 = explode("/", $fecha);
             return $parte2[2]."-".$parte2[1]."-".$parte2[0];
-    }    
+    }
     
     // RECIBE LA FECHA EN FORMATO "YYYY-mm-dd" Y LA REGRESA EN "dd/mm/YYYY"
     public function ordena_fecha_4($fecha){

@@ -1197,7 +1197,7 @@ class Comensal extends Controlador_padre {
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
         $id_conf_roles_es_3 = $this->session->userdata('id_conf_roles_es_3');
         $logged = $this->Conf_usuarios_model->isLogged();
-         if($logged == TRUE && ($id_conf_roles_es_3 == true OR $id_conf_roles_es_2 == true)){
+        if($logged == TRUE && ($id_conf_roles_es_3 == true OR $id_conf_roles_es_2 == true)){
 
             $matriz_personal                    = $this->Personal_ivic_model->personal_ivic_buscar_3();
             $data['matriz_personal']            = $matriz_personal;

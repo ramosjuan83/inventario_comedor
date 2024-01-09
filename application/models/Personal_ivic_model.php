@@ -23,7 +23,7 @@ class Personal_ivic_model extends CI_Model{
     //    id_categoria
     //    fecha_ingreso
     //    fecha_no_activo
-    public function personal_ivic_num_reg($b_texto, $id_cargo, $id_gerencia, $estado_1){
+    public function personal_ivic_num_reg($b_texto, $id_cargo, $id_gerencia, $estado_1, $b_matriz_id_cargo){
             $sql = "
                     SELECT id FROM personal_ivic WHERE
                         (
@@ -51,35 +51,19 @@ class Personal_ivic_model extends CI_Model{
                         )
                 ";
             }
+            if($b_matriz_id_cargo != false){
+                $sql .= " AND (";
+                for($i = 0; $i < count($b_matriz_id_cargo); $i++){
+                    if($i == 0){
+                        $sql .= " id_cargo = '".$b_matriz_id_cargo[$i]."'";    
+                    }else{
+                        $sql .= " OR id_cargo = '".$b_matriz_id_cargo[$i]."'";
+                    }
+                }
+                $sql .= ")";
+            }
             $sql .= " 
             "; //echo "<br />sql *".$sql."*";
-            $resultado = $this->db->query($sql);
-            return $resultado->num_rows();
-    }
-/*
-    //personal_ivic
-    //    id
-    //    cedula
-    //    nombres
-    //    apellidos
-    //    id_cargo
-    //    id_gerencia
-    //    id_gerencia_2
-    //    id_tipo
-    //    id_condicion
-    //    estado
-    //    imagen_nombre
-    //    firma_nombre
-    //    carnet_codigo
-    //    id_departamento
-    //    id_categoria
-    //    fecha_ingreso
-    //    fecha_no_activo
-    public function personal_ivic_num_reg_2($nombre){
-            $sql = "SELECT id_personal_ivic FROM personal_ivic
-                    WHERE nombre = '".$nombre."'
-                        AND  (  nombre <> NUll  or nombre <> '' )
-                        ";      //echo "<br />sql *".$sql."*";
             $resultado = $this->db->query($sql);
             return $resultado->num_rows();
     }
@@ -102,37 +86,7 @@ class Personal_ivic_model extends CI_Model{
     //    id_categoria
     //    fecha_ingreso
     //    fecha_no_activo
-    public function personal_ivic_num_reg_3($id_personal_ivic, $nombre){
-            $sql = "SELECT id_personal_ivic FROM personal_ivic
-                    WHERE
-                            (
-                                        nombre = '".$nombre."'
-                                AND  (  nombre <> NUll  or nombre <> '' )
-                            )
-                            AND id_personal_ivic <> '".$id_personal_ivic."'";      //echo "<br />sql *".$sql."*";
-            $resultado = $this->db->query($sql);
-            return $resultado->num_rows();
-    }
-*/
-    //personal_ivic
-    //    id
-    //    cedula
-    //    nombres
-    //    apellidos
-    //    id_cargo
-    //    id_gerencia
-    //    id_gerencia_2
-    //    id_tipo
-    //    id_condicion
-    //    estado
-    //    imagen_nombre
-    //    firma_nombre
-    //    carnet_codigo
-    //    id_departamento
-    //    id_categoria
-    //    fecha_ingreso
-    //    fecha_no_activo
-    public function personal_ivic_buscar($b_texto, $id_cargo, $id_gerencia, $estado_1, $por_pagina, $segmento){
+    public function personal_ivic_buscar($b_texto, $id_cargo, $id_gerencia, $estado_1, $b_matriz_id_cargo, $por_pagina, $segmento){
             $sql = "SELECT * FROM personal_ivic WHERE
                         (
                             carnet_codigo LIKE '%".$b_texto."%'
@@ -158,6 +112,17 @@ class Personal_ivic_model extends CI_Model{
                             OR estado = '5'
                         )
                 ";
+            }
+            if($b_matriz_id_cargo != false){
+                $sql .= " AND (";
+                for($i = 0; $i < count($b_matriz_id_cargo); $i++){
+                    if($i == 0){
+                        $sql .= " id_cargo = '".$b_matriz_id_cargo[$i]."'";    
+                    }else{
+                        $sql .= " OR id_cargo = '".$b_matriz_id_cargo[$i]."'";
+                    }
+                }
+                $sql .= ")";
             }
             $sql .= " 
                     ORDER BY id DESC ";
@@ -390,6 +355,17 @@ class Personal_ivic_model extends CI_Model{
     public function personal_ivic_buscar_9($id_departamento){
             $sql = "SELECT * FROM personal_ivic
                     WHERE id_departamento = '".$id_departamento."'";
+            $resultado = $this->db->query($sql);
+            if( $resultado->num_rows() > 0 ){
+                return $resultado->result();
+            }else{
+                return false;
+            }
+    }    
+    
+    public function personal_ivic_buscar_10($id_gerencia){
+            $sql = "SELECT * FROM personal_ivic
+                    WHERE id_gerencia = '".$id_gerencia."'";
             $resultado = $this->db->query($sql);
             if( $resultado->num_rows() > 0 ){
                 return $resultado->result();

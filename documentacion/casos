@@ -68,41 +68,75 @@ Puntos para reunion con comedor
         Area de programacion de comensales.
         Cambios nuevos.
 
-PARA DESACTIVAR TEMPORALMENTE EL USUARIO DE FABIANA
-    /*
-    384	297	3	2023-08-14	2023-09-22
-    */
-    SELECT * FROM estados_temporales WHERE id_personal_ivic = '297'
-
 ___________________________________________________________________________________________________________________
 
 
 
+                unset($b_matriz_id_cargo);
+                $solo_rol_cea = false;
+                if($id_conf_roles_es_6 == true AND $id_conf_roles_es_2 == false){
+                    $solo_rol_cea = true;    
+                }
+                if($solo_rol_cea == true){
+                    $b_matriz_id_cargo[0] = 297; //ESTUDIANTE POSTGRADO
+                    $b_matriz_id_cargo[1] = 298; //ESTUDIANTE PREGRADO   
+                }else{
+                    $b_matriz_id_cargo = false;
+                }
 
-        Vacaciones, Reposo, Comision de servicio, Permiso
 
-
-comensales_h_estado_temporal
-    id
-    comensales_id
-    estados_id
-    fecha_desde
-    fecha_hasta
 
         
+
+
 ___________________________________________________________________________________________________________________
 Resueltos
+Actualización 25
+        2023_12_12 +   crear nuevo rol de C.E.A.
+        2023_12_12 +   Ajustar crud de "Centro" para que este atado a la gerencia.
+        2023_12_12 +   Ajustar crud de "Coordinación / Unidad", para que este atado a la gerencia.
+        Fuentes
+            cmv
+        Base de datos
+                Conf_roles -> Agregar rol 5.
+                Conf_roles -> Agregar rol 6.
+
+Actualización 24 (En produccion)
+        2023_12_11 +   Mejora, que evite que Al iniciar seccion se queda pensando por mucho tiempo.
+        Fuentes
+            C/Login.php
+            M/Comensales_programacion_model.php
+            v/plantilla
+
+Actualización 23
+        2023_12_01 +   En el formulario de personal ivic, ajuste para asociar las tablas gerencia2, gerencia y departamento.
+        Fuentes
+            cmv
+        Base de datos
+            per_familiar_tipo        -> Agregar esta tabla
+            per_familiar             -> Agregar esta tabla
+            //Cargando las tres tablas ---------------------------------------------------
+            gerencia2                   -> Truncar esta tabla
+            gerencia                    -> Truncar esta tabla
+            departamento                -> Truncar esta tabla
+            gerencia.id_gerencia_2      -> Agregar este campo y su foraneo.
+            departamento.id_gerencia    -> Agregar este campo y su foraneo.
+            departamento.nombre         -> pasarlo a varchar 200
+            //Finde Cargando las tres tablas ---------------------------------------------------
+            UPDATE personal_ivic SET id_gerencia_2 = null , id_gerencia = null , id_departamento = null
+            prueba_personal_ivic -> colocar esta tabla
+            correr el programa que llena los departamentos
+            prueba_personal_ivic -> Quitar esta tabla
 
 Actualización 22
         2023_09_14 +   Al registrar un comensal, si la persona tiene un estado temporal (Vacaciones, Reposo, Comision de servicio, Permiso),  dejar que se registre.
         2023_08_07 +   Al registrar un comensal colocar un mensaje de que se encuentra de vacaciones.
         2023_09_18 +   En el reporte de comensales colocar oblicatorio seleccionar los campos de fecha.
         2023_08_07 +   En el reporte de comensales junto con los filtros, colocar el campo de "Estado Temporal".
-        Para Actualizar
-            Fuentes
-                cmv
-            Base de datos
-                comensales_h_estado_temporal     -> Agregar esta tabla
+        Fuentes
+            cmv
+        Base de datos
+            comensales_h_estado_temporal     -> Agregar esta tabla
 
 Actualización 21
         2023_07_27 +   Para el area de registrar personal externo, colocar un area para subir una foto.

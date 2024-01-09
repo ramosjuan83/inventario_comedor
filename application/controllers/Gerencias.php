@@ -9,10 +9,10 @@ class Gerencias extends Controlador_padre {
         $this->load->model('Conf_usuarios_model');
         $this->load->model('Gerencias_model');
         $this->load->model('Personal_ivic_model');
+        $this->load->model('Gerencias_2_model');
     }
 
     public function listar($memoria = 'false'){
-
         $logged = $this->Conf_usuarios_model->isLogged();
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
         if($logged == TRUE && $id_conf_roles_es_2 == true){ 
@@ -82,22 +82,39 @@ class Gerencias extends Controlador_padre {
                 if($segmento > 0){}else{$segmento = 0;} //echo "segmento *".$segmento."*";
                 $this->pagination->initialize($config); //inicializamos la paginación
                 $dat_list = $this->Gerencias_model->gerencias_buscar($b_texto, $config['per_page'],$segmento);
-//echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";                
+                //echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";                
+                //[0] => stdClass Object
+                //    (
+                //        [gerencias_id] => 60
+                //        [gerencias_nombre] => UNIDAD DE TECNOLOGIA NUCLEAR (U.T.N.)
+                //        [gerencias_2_nombre] => SUB-DIRECCIÓN
+                //    )
                 
                 if($dat_list != false){
                     for($i = 0; $i < count($dat_list); $i++){
-                        $gerencias_id = $dat_list[$i]->id;  //echo "gerencias_id *".$gerencias_id."*";
+                        $gerencias_id = $dat_list[$i]->gerencias_id;  //echo "gerencias_id *".$gerencias_id."*";
                         unset($matriz_comensales);                        
-                        $matriz_personal_ivic = $this->Personal_ivic_model->personal_ivic_buscar_9($gerencias_id);
+                        //$matriz_personal_ivic = $this->Personal_ivic_model->personal_ivic_buscar_9($gerencias_id);
+                        $matriz_personal_ivic = $this->Personal_ivic_model->personal_ivic_buscar_10($gerencias_id);
                         if($matriz_personal_ivic == false){
                             $dat_list[$i]->esta_asociado_en_personal_ivic = false;
                         }else{
                             $dat_list[$i]->esta_asociado_en_personal_ivic = true;
                         }
+                        
+                        //$matriz_gerencias_2 = $this->Gerencias_2_model->gerencias_2_buscar_2($dat_list[$i]->id_gerencia_2);
+                        //$dat_list[$i]->gerencias_2_nombre = $matriz_gerencias_2[0]->nombre;
                     }                    
                 } 
-//echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";
-                
+                //echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";
+                //[0] => stdClass Object
+                //    (
+                //        [id] => 60
+                //        [id_gerencia_2] => 5
+                //        [nombre] => UNIDAD DE TECNOLOGIA NUCLEAR (U.T.N.)
+                //        [esta_asociado_en_personal_ivic] => 1
+                //        [gerencias_2_nombre] => SUB-DIRECCIÓN
+                //    )                
                 
                 //Busco los campos de paginacion
                 $data['pag_desde'] = 0;
@@ -134,6 +151,10 @@ class Gerencias extends Controlador_padre {
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
         if($logged == TRUE && $id_conf_roles_es_2 == true){
             $data['oper'] = "agregar";
+            
+            $matriz_gerencias_2 = $this->Gerencias_2_model->gerencias_2_buscar_3();
+            $data['matriz_gerencias_2'] = $matriz_gerencias_2;             
+            
             $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('plantilla/menu');
@@ -152,7 +173,10 @@ class Gerencias extends Controlador_padre {
         $logged = $this->Conf_usuarios_model->isLogged();
         if($logged == TRUE){            
             $valor = "nombre";          if ( isset($_POST[$valor])              ){	$nombre = ucfirst( $_POST[$valor] );	}else{	$nombre	= "";	}
-
+            $valor = "id_gerencia_2";  if ( isset($_POST[$valor])              ){	$id_gerencia_2 = $_POST[$valor];       }else{	$id_gerencia_2	= "";	}            
+            
+            echo "id_gerencia_2 *".$id_gerencia_2."*";
+            
             $nombre        = $this->convierte_texto($nombre);
 
             ////Valida reg existente
@@ -170,7 +194,8 @@ class Gerencias extends Controlador_padre {
             ////FIN de Valida reg existente
             $valido = true;
             if($valido == true){
-                    $id = $this->Gerencias_model->gerencias_insertar($nombre);
+                    //$id = $this->Gerencias_model->gerencias_insertar($nombre);
+                    $id = $this->Gerencias_model->gerencias_insertar($id_gerencia_2, $nombre);
                     if ($id > 0){
                         $mensaje = "Inserto el gerencias con id ".$id;
                         $mensaje_2 = "Inserto el gerencias ".$nombre;
@@ -199,6 +224,8 @@ class Gerencias extends Controlador_padre {
         $id_conf_roles_es_2 = $this->session->userdata('id_conf_roles_es_2');
         if($logged == TRUE && $id_conf_roles_es_2 == true){
 
+            $matriz_gerencias_2 = $this->Gerencias_2_model->gerencias_2_buscar_3();
+            $data['matriz_gerencias_2'] = $matriz_gerencias_2; 
             
             $fila_reg = $this->Gerencias_model->gerencias_buscar_2($id);   //echo "<pre>"; print_r($fila_reg); echo "</pre>";
             $data['fila_registro'] = $fila_reg[0]; 
@@ -222,13 +249,14 @@ class Gerencias extends Controlador_padre {
         $logged = $this->Conf_usuarios_model->isLogged();
         if($logged == TRUE){
             $valor = "id";              if ( isset($_POST[$valor]) 	){	$id = $_POST[$valor];                   }else{	$id	= "";	}
-            $valor = "nombre";          if ( isset($_POST[$valor])              ){	$nombre = ucfirst( $_POST[$valor] );	}else{	$nombre	= "";	}
+            $valor = "nombre";          if ( isset($_POST[$valor])      ){	$nombre = ucfirst( $_POST[$valor] );	}else{	$nombre	= "";	}
+            $valor = "id_gerencia_2";  if ( isset($_POST[$valor])              ){	$id_gerencia_2 = $_POST[$valor];       }else{	$id_gerencia_2	= "";	}            
 
             $nombre        = $this->convierte_texto($nombre);
             
             $valido = true;
             if($valido == true){
-                $oper_realizada = $this->Gerencias_model->gerencias_editar($id, $nombre);
+                $oper_realizada = $this->Gerencias_model->gerencias_editar($id, $id_gerencia_2, $nombre);
                 //echo "oper_realizada *".$oper_realizada."*";
                 if ($oper_realizada){
                     $mensaje = "Actualizó el gerencias con id ".$id;
@@ -322,6 +350,12 @@ class Gerencias extends Controlador_padre {
             $nombre     = $this->input->post('nombre');
             $resultados = $this->Gerencias_model->gerencias_buscar_6($nombre); //echo "resultados *"; print_r($resultados); echo "*";
             echo json_encode($resultados);
-    }       
+    }
+
+    public function get_gerencias_buscar_7(){
+            $id_gerencia_2     = $this->input->post('id_gerencia_2');
+            $resultados = $this->Gerencias_model->gerencias_buscar_7($id_gerencia_2); //echo "resultados *"; print_r($resultados); echo "*";
+            echo json_encode($resultados);
+    }    
 
 }

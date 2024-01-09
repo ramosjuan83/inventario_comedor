@@ -23,13 +23,14 @@ class Gerencias_2_model extends CI_Model{
     //    id
     //    nombre
     public function gerencias_2_buscar_3(){
-            $sql = "SELECT * FROM gerencias_2 ORDER BY nombre ASC";
+            $sql = "SELECT * 
+                    FROM gerencias_2 ORDER BY nombre ASC";
             $resultado = $this->db->query($sql);
             if( $resultado->num_rows() > 0 ){
                 return $resultado->result();
             }else{
                 return false;
             }
-    }    
+    }
 
 }

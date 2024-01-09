@@ -224,7 +224,8 @@ class Login extends Controlador_padre{
                     if( $matriz_conf_usuarios_roles != false ){ $id_conf_roles_es_4 = true;    }else{ $id_conf_roles_es_4 = false; }
                     $matriz_conf_usuarios_roles = $this->Conf_roles_model->conf_usuarios_roles_buscar_2($id_usuario, 5);
                     if( $matriz_conf_usuarios_roles != false ){ $id_conf_roles_es_5 = true;    }else{ $id_conf_roles_es_5 = false; }
-                    
+                    $matriz_conf_usuarios_roles = $this->Conf_roles_model->conf_usuarios_roles_buscar_2($id_usuario, 6);
+                    if( $matriz_conf_usuarios_roles != false ){ $id_conf_roles_es_6 = true;    }else{ $id_conf_roles_es_6 = false; }                    
                     $sesion_data = array(
                       'iduser'    => $matriz_conf_usu_pass[0]->conf_usuarios_id_usuario
                     , 'ciuser'    => $matriz_conf_usu_pass[0]->conf_usuarios_ci_usu
@@ -238,6 +239,7 @@ class Login extends Controlador_padre{
                     , 'id_conf_roles_es_3' => $id_conf_roles_es_3
                     , 'id_conf_roles_es_4' => $id_conf_roles_es_4
                     , 'id_conf_roles_es_5' => $id_conf_roles_es_5
+                    , 'id_conf_roles_es_6' => $id_conf_roles_es_6
                     );
                     $this->session->set_userdata($sesion_data);                    
                     
@@ -358,7 +360,6 @@ class Login extends Controlador_padre{
         //    )
         if($matriz_comensales_programacion != false){
             for($i = 0; $i < count($matriz_comensales_programacion); $i++){
-                
                 unset($matriz_Comensal);
                 $matriz_Comensal = $this->Comensal_model->comensales_buscar_10($matriz_comensales_programacion[$i]->fecha, $matriz_comensales_programacion[$i]->id_comedor_comida_tipo, $matriz_comensales_programacion[$i]->id_personal_ivic, $matriz_comensales_programacion[$i]->id_personal_visitante, 1); //echo "cli_clientes_num_reg *".$cohorte_num_reg."*";
                 if($matriz_Comensal == false){
@@ -369,6 +370,8 @@ class Login extends Controlador_padre{
                         $mensaje_2 = "Inserto un registro que se encontraba programado de forma automatica";
                         $this->insertar_bitacora_2("comensal, comensales_programacion", $mensaje, $mensaje_2);                        
                     }                    
+                }else{ //ESTE TRAMO ESTA PORQUE, SI LA RED SE CAE EN ESTE PUNTO, PUEDE RETOMARLOS
+                    $this->Comensales_programacion_model->comensales_programacion_editar($matriz_comensales_programacion[$i]->id, 2);
                 }
             }            
         }

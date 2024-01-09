@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //$config['base_url'] = 'http://localhost/ivic_sistema_integral/';
 //$config['base_url'] = 'http://190.170.129.147/ivic_sistema_integral/';
 //$config['base_url'] = 'http://190.170.129.230/ivic_sistema_integral/';
-$config['base_url'] = 'http://localhost/ivic_sistema_integral';
+$config['base_url'] = 'http://localhost/ivic_sistema_integral/';
 
 
 /*
