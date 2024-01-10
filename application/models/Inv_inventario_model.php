@@ -82,6 +82,59 @@ class Inv_inventario_model extends CI_Model{
             // }
     }  
     
+
+    public function inv_inventario_buscar_almacen($b_texto, $por_pagina, $segmento){
+        $sql = "SELECT 0 as disponible,inv_inventario.id as id,inv_inventario.*,inv_articulo.nombre as nombre_articulo,inv_almacen.nombre as nombre_almacen,inv_unidad_medida.nombre as nombre_medida FROM inv_inventario INNER JOIN inv_articulo ON inv_articulo.id=inv_inventario.id_articulo INNER JOIN inv_almacen ON inv_almacen.id=inv_inventario.id_almacen INNER JOIN inv_unidad_medida ON inv_unidad_medida.id=inv_articulo.id_unidad_medida WHERE
+                        inv_inventario.id_almacen LIKE '%".$b_texto."%'
+                ORDER BY inv_articulo.nombre ASC";
+                
+                if(!empty($segmento)){
+                    $sql." LIMIT ".$segmento.", ".$por_pagina;  //echo "<br />sql *".$sql."*";       
+                } 
+
+        $resultado = $this->db->query($sql);
+        $arrAlmacen=array();
+
+        if( $resultado->num_rows() > 0 ){
+            
+            foreach ($resultado->result() as $row){
+
+                //phpinfo();
+                $saldo=0;
+                   //definir rowspan
+                $resul=array_filter($arrAlmacen, fn($e)=>$e==$row->id_almacen);
+                $row->rowspan=count($resul)>0?0:1;
+                if(count($resul)==0){
+                       array_push($arrAlmacen,$row->id_almacen);
+                }
+
+                
+
+                $arrSaldo=$this->Inv_movimiento_inventario_model->inv_movimiento_saldo_fecha($row->id_articulo,$row->id_almacen,date("Y-m-d"));
+
+                if($arrSaldo){
+                    foreach($arrSaldo as $item){
+
+                        
+                        $saldo=$item['saldo_final'];
+                       
+                    }
+                }
+                $row->disponible=$saldo>0?$saldo:0;
+            }
+
+            return $resultado->result();
+        }else{
+            return false;
+        }
+        // if( $resultado->num_rows() > 0 ){
+
+            
+        //     return $resultado->result();
+        // }else{
+        //     return false;
+        // }
+}  
  
  
     
