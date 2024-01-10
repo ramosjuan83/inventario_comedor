@@ -135,10 +135,10 @@
                         <tr class="text-center">
                             <!-- <th scope="col">ID</th> -->
                             <th scope="col" class="text-left">Artículo</th>
-                            <th scope="col" class="text-left">Fecha Ingreso</th>
+                            <th scope="col" class="text-center">Fecha Ingreso</th>
                             <th scope="col" class="text-left">Almacén</th>
-                            <th scope="col" class="text-left">Cantidad</th>
-                            <th scope="col" class="text-left">Fecha Vencimiento</th>
+                            <th scope="col" class="text-center">Cantidad</th>
+                            <th scope="col" class="text-center">Fecha Vencimiento</th>
                             <th scope="col" class="text-left">Observación</th>
                             <th scope="col">ACCIONES</th>
                         </tr>
@@ -149,10 +149,10 @@
                                 <tr class="text-center">
                                     <!-- <th scope="row"><?=$dat->id?></th> -->
                                     <td class="text-left"><?=$dat->nombre_articulo?></td>
-                                    <td class="text-left"><?=$dat->fecha_ingreso_2?></td>
+                                    <td class="text-center"><?=$dat->fecha_ingreso_2?></td>
                                     <td class="text-left"><?=$dat->nombre_almacen?></td>
-                                    <td class="text-left"><?=$dat->cantidad?></td>
-                                    <td class="text-left"><?=$dat->fecha_vencimiento_2 ?></td>
+                                    <td class="text-center"><?=$dat->cantidad?></td>
+                                    <td class="text-center"><?=$dat->fecha_vencimiento_2 ?></td>
                                     <td class="text-left"><?=$dat->observacion?></td>
                                     <td>
                                         
