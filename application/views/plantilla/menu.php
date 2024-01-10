@@ -135,8 +135,56 @@
                             </li><?php
                         }                        
                         
-                        ?>
-                        <?php
+
+                        if($this->session->userdata['id_conf_roles_es_5'] == true){ ?>
+                          <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-book color_5"></i>
+                                  <span class="color_5">Catálogos</span>
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                  <a class="dropdown-item" href="<?=site_url('Inv_unidad_medida/listar/limpiar')?>"><i class="fas fa-weight color_7"></i> Unidad medida </a>
+                                  <a class="dropdown-item" href="<?=site_url('Inv_almacen/listar/limpiar')?>"><i class="fas fa-warehouse color_7"></i> Almacénes </a>
+                                  <a class="dropdown-item" href="<?=site_url('Inv_tipo_articulo/listar/limpiar')?>"><i class="fas fa-list color_7"></i> Tipo de Artículos </a>
+                                  <a class="dropdown-item" href="<?=site_url('Inv_articulo/listar/limpiar')?>"><i class="fas fa-list-ul color_7"></i> Artículos </a>
+                              </div>
+                          </li><?php
+                      }
+
+                      if($this->session->userdata['id_conf_roles_es_5'] == true){ ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-newspaper color_5"></i>
+                                <span class="color_5">Inventario</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="<?=site_url('Inv_inventario/listar/limpiar')?>"><i class="fas fa-cart-flatbed color_7"></i> Inventario </a>
+                                <a class="dropdown-item" href="<?=site_url('Inv_recepcion/listar/limpiar')?>"><i class="fas fa-arrow-left color_7"></i> Recepcion </a>
+                                <a class="dropdown-item" href="<?=site_url('Inv_despacho/listar/limpiar')?>"><i class="fas fa-arrow-right color_7"></i> Despacho </a>
+                                <a class="dropdown-item" href="<?=site_url('Inv_traslado/listar/limpiar')?>"><i class="fas fa-arrows-left-right color_7"></i> Traslado </a>
+                                <a class="dropdown-item" href="<?=site_url('Inv_merma/listar/limpiar')?>"><i class="fas fa-arrows-down-to-line color_7"></i> Merma </a>
+                            </div>
+                        </li><?php
+                    }
+
+                    
+                    if($this->session->userdata['id_conf_roles_es_5'] == true){ ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-print color_5"></i>
+                                <span class="color_5">Reportes</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <!-- <a class="dropdown-item" href="<?=site_url('Inv_inventario/reporte_form')?>"><i class="fas fa-chart-simple color_7"></i> Estadísticas Semanales </a> -->
+                                <a class="dropdown-item" href="<?=site_url('Inv_articulo/reporte_form')?>"><i class="fas fa-list color_7"></i> Artículos </a>
+                                <a class="dropdown-item" href="<?=site_url('Inv_inventario/reporte_general_form')?>"><i class="fas fa-globe color_7"></i> General </a>
+                            </div>
+                        </li><?php
+                    }
+
+
+
+                        // <?php
                         //if($id_conf_roles_es_1 == true or $id_conf_roles_es_4 == true){
                             /*
                         ?>
