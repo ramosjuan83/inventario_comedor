@@ -446,7 +446,8 @@
                             <div class="col-md-6 float-left">
                                 <label>Almacén <span style="color:#F00;">*</span></label>
                                 <br />
-                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_almacen" name="id_almacen" data-show-subtext="true" data-live-search="true" onchange="valida_almacen('<?php echo $oper; ?>')"><?php
+                                <!-- <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_almacen" name="id_almacen" data-show-subtext="true" data-live-search="true" onchange="valida_almacen('<?php echo $oper; ?>')"> -->
+                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_almacen" name="id_almacen" data-show-subtext="true" data-live-search="true">   
                                     $valorSel  = $fila_registro->id_almacen;
                                     ?><option value="null">Seleccione</option><?php
                                     for($j = 0; $j < count($matriz_almacenes); $j++){
@@ -465,7 +466,7 @@
                                 </span>
                             </div> 
     
-                            <div class="col-md-6 container-fluid">
+                            <!-- <div class="col-md-6 container-fluid">
                                         <label>Capacidad Almacén <span style="color:#F00;"></span></label>
                                         <br />
                                         <?php
@@ -480,14 +481,15 @@
                                         //echo "fila_personal *"; print_r($fila_registro); echo "*";
                                         ?>
                                         <input class="form-control" id="disponibilidad" name="disponibilidad" type="text" size="255" maxlength="255" readonly=true  value="<?php if( isset($fila_registro->disponibilidad) ){ echo $fila_registro->disponibilidad; } ?>">
-                            </div>
+                            </div> -->
                             <div class="col-md-6 container-fluid">
                                         <label>Cantidad <span style="color:#F00;">*</span></label>
                                         <br />
                                         <?php
                                         //echo "fila_personal *"; print_r($fila_registro); echo "*";
                                         ?>
-                                        <input class="form-control" id="cantidad" name="cantidad" type="text" placeholder="" value="<?php if( isset($fila_registro->cantidad) ){ echo $fila_registro->cantidad; } ?>" size="255" maxlength="255" onchange="valida_saldo('<?php echo $oper; ?>')">
+                                        <!-- <input class="form-control" id="cantidad" name="cantidad" type="text" placeholder="" value="<?php if( isset($fila_registro->cantidad) ){ echo $fila_registro->cantidad; } ?>" size="255" maxlength="255" onchange="valida_saldo('<?php echo $oper; ?>')"> -->
+                                        <input class="form-control" id="cantidad" name="cantidad" type="text" placeholder="" value="<?php if( isset($fila_registro->cantidad) ){ echo $fila_registro->cantidad; } ?>" size="255" maxlength="255">
                                         <input type="hidden" id="cantidadAux" name="cantidadAux" value="<?php if( isset($fila_registro->cantidad) ){ echo $fila_registro->cantidad; } ?>">
                                         <span id="error_cantidad" style="display: none" class="text-danger error-camp">
                                             <i class="fa fa-exclamation-circle fa-2x"></i>

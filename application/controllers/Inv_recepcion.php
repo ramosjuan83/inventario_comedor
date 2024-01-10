@@ -193,6 +193,7 @@ class Inv_recepcion extends Controlador_padre {
 
             $fecha = $this->ordena_fecha_3($fecha);    
             $fecha_vencimiento = $this->ordena_fecha_3($fecha_vencimiento);  
+            $valido=true;
           
 
             ////Valida reg existente
@@ -208,30 +209,30 @@ class Inv_recepcion extends Controlador_padre {
             //        echo "</script>";
             //}
 
-    
-            $resultados = $this->Inv_movimiento_inventario_model->inv_movimiento_saldo_actual($id_articulo,$id_almacen);
-            $arrDato=json_encode($resultados);
+            // VALIDO DISPONIBILIDAD DE ALMACEN
+            // $resultados = $this->Inv_movimiento_inventario_model->inv_movimiento_saldo_actual($id_articulo,$id_almacen);
+            // $arrDato=json_encode($resultados);
 
-            if($arrDato==false){
-                $saldo=0;
-            }else{
-                if (is_array($resultados) || is_object($resultados)){
-                    foreach ($resultados as $value)
-                    {
-                            $saldo=$value['saldo_final'];
-                    }
-                }else{
-                    $saldo=0;
-                }
-            }
+            // if($arrDato==false){
+            //     $saldo=0;
+            // }else{
+            //     if (is_array($resultados) || is_object($resultados)){
+            //         foreach ($resultados as $value)
+            //         {
+            //                 $saldo=$value['saldo_final'];
+            //         }
+            //     }else{
+            //         $saldo=0;
+            //     }
+            // }
 
-            //echo json_encode($resultados);
-            $disponible=floatval($capacidad_almacen)-floatval($saldo);
-            if($cantidad > $disponible){
-                $valido = false;
-            }else{
-                $valido = true;
-            }
+            // //echo json_encode($resultados);
+            // $disponible=floatval($capacidad_almacen)-floatval($saldo);
+            // if($cantidad > $disponible){
+            //     $valido = false;
+            // }else{
+            //     $valido = true;
+            // }
 
             // echo "disponible".$disponible." capacidad".floatval($capacidad_almacen)." saldo".floatval($saldo);
             // phpinfo();
@@ -342,30 +343,30 @@ class Inv_recepcion extends Controlador_padre {
             $valido = true;
 
 
+            // VERIFICA LA DISPONIBILIDAD POR ARTICULO Y ALMACEN
+            // $resultados = $this->Inv_movimiento_inventario_model->inv_movimiento_saldo_actual($id_articulo,$id_almacen);
+            // $arrDato=json_encode($resultados);
+            // if($arrDato==false){
+            //     $saldo=0;
+            // }else{
+            //     if (is_array($resultados) || is_object($resultados)){
+            //         foreach ($resultados as $value)
+            //         {
+            //                 $saldo=$value['saldo_final'];
+            //         }
+            //     }else{
+            //         $saldo=0;
+            //     }
+            // }
 
-            $resultados = $this->Inv_movimiento_inventario_model->inv_movimiento_saldo_actual($id_articulo,$id_almacen);
-            $arrDato=json_encode($resultados);
-            if($arrDato==false){
-                $saldo=0;
-            }else{
-                if (is_array($resultados) || is_object($resultados)){
-                    foreach ($resultados as $value)
-                    {
-                            $saldo=$value['saldo_final'];
-                    }
-                }else{
-                    $saldo=0;
-                }
-            }
-
-            //echo json_encode($resultados);
-            $disponible=floatval($capacidad_almacen)-floatval($saldo)+floatval($cantidadAux);
+            // //echo json_encode($resultados);
+            // $disponible=floatval($capacidad_almacen)-floatval($saldo)+floatval($cantidadAux);
        
-            if($cantidad > $disponible){
-                $valido = false;
-            }else{
-                $valido = true;
-            }
+            // if($cantidad > $disponible){
+            //     $valido = false;
+            // }else{
+            //     $valido = true;
+            // }
 
 
 
