@@ -100,9 +100,7 @@
                                             Campo Vacio
                         </span>
                     </div> 
-                </div>
-                <br> 
-                <div class='col-md-3'>
+                    <div class='col-md-3'>
                     <br>
                     <span class="text-success" data-toggle="tooltip" data-placement="left" title="Ver reporte en formato PDF">
                         <a href="#" onclick="ver_reporte('pdf')" class="btn btn-outline-secondary">
@@ -110,7 +108,10 @@
                         </a>
                     </span>
                     
-                </div>           
+                </div> 
+                </div>
+                <br> 
+                     
             </div>
                 <input class="form-control" type="hidden" name="b_texto" id="b_texto" value="<?php echo $b_texto; ?>" placeholder="buscar" onkeypress="return pulsar(event)" size="20" maxlength="20">
            
