@@ -49,7 +49,7 @@ class Inv_articulo_model extends CI_Model{
     //    id
     //    nombre
     public function inv_articulo_buscar_1(){
-        $sql = "SELECT * FROM inv_articulo WHERE id_status=1 ORDER BY nombre ASC";
+        $sql = "SELECT inv_articulo.id,concat(inv_articulo.nombre,' (', inv_unidad_medida.nombre,')') as nombre FROM inv_articulo INNER JOIN inv_unidad_medida ON inv_unidad_medida.id=inv_articulo.id_unidad_medida  WHERE inv_articulo.id_status=1 ORDER BY inv_articulo.nombre ASC";
         $resultado = $this->db->query($sql);
         if( $resultado->num_rows() > 0 ){
             return $resultado->result();
