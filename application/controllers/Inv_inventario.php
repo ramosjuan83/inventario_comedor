@@ -352,6 +352,129 @@ class Inv_inventario extends Controlador_padre {
         }
     }
 
+    public function guardar_inventario_ajuste(){
+        $logged = $this->Conf_usuarios_model->isLogged();
+        $detalle_ajuste= array();
+        $ajuste=0;
+
+        foreach ($_POST as $key => $value){
+           
+            // if($value!='Guardar'){
+            //     echo "key: ".$key." valor: ".$value;
+            // }
+            switch($key){
+                case 'almacen_aux':
+                    $almacen=$value;
+                    break;
+                case 'fecha':
+                    $fecha=$value;
+                    $fecha=$this->ordena_fecha_3($fecha);
+                    break;
+                case 'observacion':
+                        $observacion=$value;
+                        break; 
+                default:
+                    $arr=explode("_",$key);
+                    //echo $arr[0];
+                    if($arr[0]=='ajuste'){
+                        $ajuste=$value;
+                    }elseif($arr[0]=='disponible'){
+
+                        array_push($detalle_ajuste, $key."_".$ajuste."_".$value);
+                    }
+
+                break;                  
+            }
+        }
+
+
+
+        //phpinfo();
+
+
+        if($logged == TRUE){            
+            // $valor = "nombre";          if ( isset($_POST[$valor])              ){	$nombre = ucfirst( $_POST[$valor] );	}else{	$nombre	= "";	}
+
+            // $nombre        = $this->convierte_texto($nombre);
+
+            // $valor = "id_articulo";          if ( isset($_POST[$valor])              ){	$id_articulo = ucfirst( $_POST[$valor] );	}else{	$id_articulo	= "";	}
+            // $valor = "id_almacen";          if ( isset($_POST[$valor])              ){	$id_almacen = ucfirst( $_POST[$valor] );	}else{	$id_almacen	= "";	}
+            // $valor = "capacidad_almacen";          if ( isset($_POST[$valor])              ){	$capacidad_almacen = ucfirst( $_POST[$valor] );	}else{	$capacidad_almacen	= "";	}
+
+            // if(strlen($fecha) > 2){     $fecha = $this->ordena_fecha_3($fecha);    }   
+            ////Valida reg existente
+            //$valido = false;
+            //$gerencias_num_reg = $this->Gerencias_model->gerencias_num_reg_2($parametros['nombre']); //echo "cli_clientes_num_reg *".$gerencias_num_reg."*";
+            //if($gerencias_num_reg == 0){ $valido = true; }
+            //else{
+            //        echo "<script language='javascript'>";
+            //        echo "alert('El registro no fue incluido, el nombre ya se encuentra en el sistema')";
+            //        echo "</script>";
+            //        echo "<script language='javascript'>";
+            //        echo "window.history.go(-1)";
+            //        echo "</script>";
+            //}
+
+          
+
+            $resul=$this->Inv_inventario_model->inv_inventario_existe_ajuste($almacen,$fecha);
+
+            ////FIN de Valida reg existente
+            $valido = true;
+            if($valido == true){
+
+
+                    $id = $this->Inv_inventario_model->inv_inventario_insertar_ajuste($almacen,$fecha,$observacion);
+                    if ($id > 0){
+
+                        foreach($detalle_ajuste as $key => $value){
+
+                            $arr=explode("_",$value);
+                            $id_articulo=$arr[1];
+                            $monto_ajuste=$arr[2];
+                            $monto_disponible=$arr[3];
+                            $monto_diferencia=$monto_disponible-$monto_ajuste;
+                            
+                            $idDetalle = $this->Inv_inventario_model->inv_inventario_insertar_ajuste_detalle($id,$id_articulo,$monto_ajuste,$monto_disponible,$monto_diferencia);
+                            
+                            if($monto_diferencia <> 0){
+
+                                    // generar movimiento
+                                    if($monto_diferencia < 0){
+                                        $tipo_documento="aumento";
+                                        $monto_diferencia=($monto_diferencia*-1);
+                                    }elseif($monto_diferencia > 0){
+                                        $tipo_documento="disminucion";
+                                    }
+
+                                    $this->Inv_movimiento_inventario_model->inv_movimiento_inventario_insertar($id_articulo,$almacen,$fecha,$monto_diferencia,$id,$tipo_documento,$observacion);
+                            }
+                        }
+
+
+
+                        $mensaje = "Inserto el ajuste de inventario con id ".$id;
+                        $mensaje_2 = "Inserto el ajuste detalle de inventario ".$idDetalle;
+                        $s_mensaje = array(
+                                'inv_inventario_mensaje_tipo'         => 'alert-success',
+                                'inv_inventario_mensaje_contenido'    => 'Registros insertado exitosamente, '.$mensaje_2
+                        );
+                        $this->session->set_userdata($s_mensaje);
+                        $this->insertar_bitacora_2("inv_inventario", $mensaje, $mensaje_2);
+                        redirect('inv_inventario/listar_inventario/cargo_ultima_pagina');
+                    }else{
+                        redirect('inv_inventario/listar_inventario');
+                    }                    
+            }
+        }else{
+                    $this->session->sess_destroy('username');
+                    $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+                    $this->load->view('plantilla/header', $data);
+                    $this->load->view('login/v_login_1');
+                    $this->load->view('plantilla/footer');
+        }
+    }
+
     public function editar($id){
         $logged = $this->Conf_usuarios_model->isLogged();
         $id_conf_roles_es_5 = $this->session->userdata('id_conf_roles_es_5');
@@ -706,6 +829,7 @@ class Inv_inventario extends Controlador_padre {
     public function ver_pdf_lista_toma_inventario($b_texto){
         $logged = $this->Conf_usuarios_model->isLogged();
         if($logged == TRUE){
+
             
             // if($b_estado == "NULL"){         $b_estado = "";          }
             // $data['b_estado'] = $b_estado;            
@@ -716,11 +840,11 @@ class Inv_inventario extends Controlador_padre {
             $b_texto = str_replace("%20", " ", $b_texto); //LE QUITO EL FORMATO DE LOS ESPACIOS ENTRE PALABRAS
             $data['b_texto'] = $b_texto;
 
-            $matriz_inventarios = $this->Inv_inventario_model->inv_inventario_buscar($b_texto, "", ""); 
+            $matriz_inventarios = $this->Inv_inventario_model->inv_inventario_buscar_almacen($b_texto, "", ""); 
 
             $data['matriz_inventarios'] = $matriz_inventarios;   
             
-            $this->load->view('inv_inventario/reporte_pdf_lista', $data); 
+            $this->load->view('inv_inventario/reporte_pdf_lista_ajuste', $data); 
         }        
     }  
 

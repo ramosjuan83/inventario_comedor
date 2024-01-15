@@ -81,19 +81,54 @@ class Inv_inventario_model extends CI_Model{
             //     return false;
             // }
     }  
+
+    function inv_inventario_existe_ajuste($almacen,$fecha){
+
+        $sql="SELECT * FROM inv_ajuste_inventario WHERE id_almacen='$almacen' AND fecha='$fecha' AND id_status=1";
+        $resultado = $this->db->query($sql);
+
+
+        if( $resultado->num_rows() > 0 ){
+            
+            foreach ($resultado->result() as $row){
+                // Se elimina el detalle del ajuste del día por almacen
+                $sqlDeleteAD = "
+                UPDATE inv_ajuste_detalle_inventario SET id_status=2 WHERE id_ajuste='".$row->id."'";      //echo "<br />sql *".$sql."*";
+                 $resultadoAD = $this->db->query($sqlDeleteAD);
+
+                 // Se elimina el ajuste del día por almacen
+                 $sqlDeleteA = "
+                 UPDATE inv_ajuste_inventario SET id_status=2 WHERE id='".$row->id."'";      //echo "<br />sql *".$sql."*";
+                $resultadoA = $this->db->query($sqlDeleteA);
+
+            }
+        }    
+
+    }
     
 
     public function inv_inventario_buscar_almacen($b_texto, $por_pagina, $segmento){
-        $sql = "SELECT 0 as disponible,inv_inventario.id as id,inv_inventario.*,inv_articulo.nombre as nombre_articulo,inv_almacen.nombre as nombre_almacen,inv_unidad_medida.nombre as nombre_medida FROM inv_inventario INNER JOIN inv_articulo ON inv_articulo.id=inv_inventario.id_articulo INNER JOIN inv_almacen ON inv_almacen.id=inv_inventario.id_almacen INNER JOIN inv_unidad_medida ON inv_unidad_medida.id=inv_articulo.id_unidad_medida WHERE
+
+        $fecha= date('Y-m-d');
+        $sql = "SELECT 0 as disponible,inv_inventario.id as id,inv_inventario.*,inv_articulo.nombre as nombre_articulo,inv_articulo.id as id_articulo,inv_almacen.nombre as nombre_almacen,inv_unidad_medida.nombre as nombre_medida,monto_ajuste, ADI.monto_ajuste FROM inv_inventario 
+                INNER JOIN inv_articulo ON inv_articulo.id=inv_inventario.id_articulo 
+                INNER JOIN inv_almacen ON inv_almacen.id=inv_inventario.id_almacen 
+                INNER JOIN inv_unidad_medida ON inv_unidad_medida.id=inv_articulo.id_unidad_medida
+                LEFT JOIN inv_ajuste_inventario AI ON AI.id_almacen=inv_almacen.id AND AI.fecha='$fecha' AND AI.id_status=1
+                LEFT JOIN inv_ajuste_detalle_inventario ADI ON ADI.id_articulo=inv_articulo.id AND ADI.id_ajuste=AI.id AND ADI.id_status=1 WHERE
                         inv_inventario.id_almacen LIKE '%".$b_texto."%'
                 ORDER BY inv_articulo.nombre ASC";
                 
-                if(!empty($segmento)){
-                    $sql." LIMIT ".$segmento.", ".$por_pagina;  //echo "<br />sql *".$sql."*";       
-                } 
+                //echo $sql;
+                // if(!empty($segmento)){
+                //     $sql." LIMIT ".$segmento.", ".$por_pagina;  //echo "<br />sql *".$sql."*";       
+                // } 
+
+
 
         $resultado = $this->db->query($sql);
         $arrAlmacen=array();
+
 
         if( $resultado->num_rows() > 0 ){
             
@@ -107,8 +142,6 @@ class Inv_inventario_model extends CI_Model{
                 if(count($resul)==0){
                        array_push($arrAlmacen,$row->id_almacen);
                 }
-
-                
 
                 $arrSaldo=$this->Inv_movimiento_inventario_model->inv_movimiento_saldo_fecha($row->id_articulo,$row->id_almacen,date("Y-m-d"));
 
@@ -320,8 +353,31 @@ class Inv_inventario_model extends CI_Model{
             ('".$capacidad_almacen."','".$id_articulo."','".$id_almacen."')
             ";      //echo "<br />sql *".$sql."*";
             $resultado = $this->db->query($sql);    //echo "<hr />resultado *".$resultado."*";
+       
             return $this->db->insert_id();
-    }    
+    }  
+    
+    public function inv_inventario_insertar_ajuste($almacen,$fecha,$observacion){
+        //if($id_cargo > 0){ }else{   $id_cargo = 'NULL';   }
+        //if($id_inventario > 0){ }else{   $id_inventario = 'NULL';   }
+        $sql = "
+        INSERT INTO inv_ajuste_inventario (fecha,observacion,id_almacen,id_status) VALUES
+        ('".$fecha."','".$observacion."','".$almacen."','1')
+        ";      //echo "<br />sql *".$sql."*";
+        $resultado = $this->db->query($sql);    //echo "<hr />resultado *".$resultado."*";
+        return $this->db->insert_id();
+}   
+
+public function inv_inventario_insertar_ajuste_detalle($ajuste,$articulo,$monto_ajuste,$monto_disponibilidad,$monto_diferencia){
+    //if($id_cargo > 0){ }else{   $id_cargo = 'NULL';   }
+    //if($id_inventario > 0){ }else{   $id_inventario = 'NULL';   }
+    $sql = "
+    INSERT INTO inv_ajuste_detalle_inventario (id_ajuste,id_articulo,monto_disponibilidad,monto_ajuste,monto_diferencia,id_status) VALUES
+    ('".$ajuste."','".$articulo."','".$monto_disponibilidad."','".$monto_ajuste."','".$monto_diferencia."','1')
+    ";      //echo "<br />sql *".$sql."*";
+    $resultado = $this->db->query($sql);    //echo "<hr />resultado *".$resultado."*";
+    return $this->db->insert_id();
+}   
     
     //inventario
     //    id

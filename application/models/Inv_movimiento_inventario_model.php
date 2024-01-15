@@ -165,11 +165,13 @@ class Inv_movimiento_inventario_model extends CI_Model{
 
             switch($tipo_documento){
                 case 'recepcion':
+                case 'aumento':    
                     $entrada=$cantidad;
                     $auxAlmacen=$id_almacen;
                 break;
                 case 'merma':
-                case 'despacho':    
+                case 'despacho': 
+                case 'disminucion':   
                     $salida=$cantidad;
                     $auxAlmacen=$id_almacen;
                 break;
