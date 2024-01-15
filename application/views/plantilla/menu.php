@@ -163,7 +163,7 @@
                                 <a class="dropdown-item" href="<?=site_url('Inv_despacho/listar/limpiar')?>"><i class="fas fa-arrow-right color_7"></i> Despacho </a>
                                 <a class="dropdown-item" href="<?=site_url('Inv_traslado/listar/limpiar')?>"><i class="fas fa-arrows-left-right color_7"></i> Traslado </a>
                                 <a class="dropdown-item" href="<?=site_url('Inv_merma/listar/limpiar')?>"><i class="fas fa-arrows-down-to-line color_7"></i> Merma </a>
-                                <a class="dropdown-item" href="<?=site_url('Inv_inventario/listar_inventario/limpiar')?>"><i class="fas fa-arrows-down-to-line color_7"></i> Toma de Inventario </a>
+                                <a class="dropdown-item" href="<?=site_url('Inv_inventario/listar_inventario/limpiar')?>"><i class="fas fa-warehouse color_7"></i> Toma de Inventario </a>
                             </div>
                         </li><?php
                     }

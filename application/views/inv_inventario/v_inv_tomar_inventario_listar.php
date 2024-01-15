@@ -191,7 +191,7 @@
                                         <td class="text-center"><?=$dat->disponible?></td>
                                         <td class="text-center"><?=$dat->nombre_medida?></td>
                                         <td class="text-center">
-                                            <input type="text" class="form-control" style="text-align:right;" id="<?php echo "ajuste_".$dat->id_articulo; ?>" name="<?php echo "ajuste_".$dat->id_articulo; ?>" value="<?php  echo $dat->monto_ajuste; ?>">
+                                            <input type="number" class="form-control" style="text-align:right;" id="<?php echo "ajuste_".$dat->id_articulo; ?>" name="<?php echo "ajuste_".$dat->id_articulo; ?>" value="<?php  echo $dat->monto_ajuste; ?>">
                                             <input type="hidden" class="form-control" id="<?php echo "disponible_".$dat->id_articulo; ?>" name="<?php echo "disponible_".$dat->id_articulo; ?>" value="<?php echo $dat->disponible; ?>">
                                         </td>
                                         
