@@ -1,6 +1,10 @@
 <?php //Bootstrap ?>
-<link href="<?php echo '' .base_url('/librerias/bootstrap-4.1.3-dist/css').''?>/bootstrap.min.css" rel="stylesheet">
-<!--link href="<?php //echo '' .base_url('libreria/Shards/css').''?>/shards.css" rel="stylesheet"--><?php //EN PRUEBA ?>
+
+
+<!-- <link href="<?php echo '' .base_url('/librerias/bootstrap-4.1.3-dist/css').''?>/bootstrap.min.css" rel="stylesheet"> -->
+<link href="<?php echo '' .base_url('/librerias').''?>/bootstrap.4.5.3.min.css" rel="stylesheet">
+<!-- <link rel="stylesheet" href="/librerias/bootstrap.4.5.3.min" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"> -->
+<ink href="<?php //echo '' .base_url('libreria/Shards/css').''?>/shards.css" rel="stylesheet"--><?php //EN PRUEBA ?>
 
 
 <link href="<?php echo '' .base_url('/librerias/bootstrap-select').''?>/bootstrap-select.min.css" rel="stylesheet"><?php //SELECT INTELIGENTES ?>

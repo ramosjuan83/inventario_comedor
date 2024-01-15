@@ -79,14 +79,14 @@
             
             <form class="form-inline" action="listar" name="form_busqueda" id="form_busqueda" target="_self" enctype="multipart/form-data" method="POST">
                 <div class="form-group mb-2">
-                  <input class="form-control" type="text" name="b_texto" id="b_texto" value="<?php echo $b_texto; ?>" placeholder="buscar" onkeypress="return pulsar(event)" size="20" maxlength="20">
+                  <input class="form-control" type="search" name="b_texto" id="b_texto" value="<?php echo $b_texto; ?>" placeholder="buscar" onkeypress="return pulsar(event)" size="20" maxlength="20">
                 </div>
                 <div class="form-group mx-sm-1 mb-2">
                     <button type="button" class="btn btn-secondary" onclick="enviar()">buscar</button>
                 </div>
-                <div class="form-group mx-sm-0 mb-2">
+                <!-- <div class="form-group mx-sm-0 mb-2">
                     <button type="button" class="btn btn-secondary" onclick="reajustar()">reajustar</button>
-                </div>
+                </div> -->
                 <div class="col-md-4 float-left text-right estilo1 container-fluid mt-2">
                 <script type="text/javascript">
                     function ver_reporte(formato){
