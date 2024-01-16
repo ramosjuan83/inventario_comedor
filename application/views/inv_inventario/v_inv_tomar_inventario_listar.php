@@ -51,21 +51,38 @@
                             enviar();
                     }
                     function enviar(id_almacen) {
-                            document.form_busqueda.b_texto.value=id_almacen;
+                        
+                            document.form_busqueda.b_texto.value=document.getElementById("id_almacen").value;
                             document.form_busqueda.submit();
-                            document.form_principal.almacen_aux=id_almacen;
+                            document.form_principal.almacen_aux=document.getElementById("id_almacen").value;
+                            document.form_principal.fecha.value=document.getElementById("fecha_aux").value;
+                     
                             //if ( validarForm() ){	document.form_busqueda.submit();	}
                     }
 
                     function ver_reporte(formato){
-                        $b_texto            = document.form_busqueda.b_texto.value;
+                        $b_texto            = document.form_busqueda.id_almacen.value;
+                        let fecha= document.getElementById("fecha_aux").value;
+                        
+
                         if($b_texto.length == 0){           $b_texto = "NULL";          }
+
+                       
 
                         // $b_estado            = document.form_busqueda.b_estado.value;
                         // if($b_estado.length == 0){           $b_estado = "NULL";          }
 
+                       
+                        fecha=String(fecha).replace("/","_");
+                        fecha=String(fecha).replace("/","_");
+
+                        
+            
+                        let str=$b_texto+'_'+fecha;
+
+
                         if(formato == 'pdf'){
-                            window.open("<?php echo ''.base_url('').''?>index.php/Inv_inventario/ver_pdf_lista_toma_inventario/"+$b_texto);
+                            window.open("<?php echo ''.base_url('').''?>index.php/Inv_inventario/ver_pdf_lista_toma_inventario/"+str);
                         }
                         // if(formato == 'excel'){
                         //     window.open("<?php echo ''.base_url('').''?>index.php/Inv_inventario/ver_excel_lista/"+$b_texto);    
@@ -77,11 +94,33 @@
                         return text;
                     }
 
+                    setTimeout(() => {    
+                if (document.readyState === 'complete') {
+                    $('#fecha_aux').datepicker({
+                                    format: 'dd/mm/yyyy',
+                                    todayHighlight: true,
+                                    pick12HourFormat: true,
+                                    language: "es"
+                                }); 
+                }
+            }, 100);
+
             </script>
 
             <form class="form-inline" action="listar" name="form_busqueda" id="form_busqueda" target="_self" enctype="multipart/form-data" method="POST">
             <div class="card-body bg-white">
                 <div class="row">
+                <td>
+                    <div class="col-md-6">
+                        <span>Fecha <span style="color:#F00;"></span></span>
+                        <br />
+                        <input type="text" class="form-control" id="fecha_aux" name="fecha_aux" value="<?php if(isset($_POST['fecha_aux'])){ echo $_POST['fecha_aux']; }else{ echo date("d/m/Y"); } ?>" onchange="enviar(this.value)">
+                        <span id="error_id_almacen" style="display: none" class="text-danger error-camp">
+                                                    <i class="fa fa-exclamation-circle fa-2x"></i>
+                                                    Campo Vacio
+                        </span>
+                    </div>
+
                     <div class="col-md-3">
                         
                         <span>Almacén <span style="color:#F00;">*</span></span>
@@ -102,12 +141,13 @@
                     </div> 
                     <div class='col-md-3'>
                     <br>
+                    <?php if(isset($_POST['fecha_aux']) && $_POST['fecha_aux']!='') { ?>
                     <span class="text-success" data-toggle="tooltip" data-placement="left" title="Ver reporte en formato PDF">
                         <a href="#" onclick="ver_reporte('pdf')" class="btn btn-outline-secondary">
                             <i class="fas fa-file-pdf  text-danger"></i> Imprimir Listado
                         </a>
                     </span>
-                    
+                    <?php } ?>
                 </div> 
                 </div>
                 <br> 
@@ -153,7 +193,7 @@
                             <td><div class="col-md-6">
                                 <span>Fecha <span style="color:#F00;"></span></span>
                                 <br />
-                                <input type="text" class="form-control" id="fecha" readonly name="fecha" value="<?php echo date("d/m/Y") ?>">
+                                <input type="hidden" class="form-control" id="fecha" readonly name="fecha" value="<?php if(isset($_POST['fecha_aux'])) { echo $_POST['fecha_aux']; } ?>">
                                 <span id="error_id_almacen" style="display: none" class="text-danger error-camp">
                                                     <i class="fa fa-exclamation-circle fa-2x"></i>
                                                     Campo Vacio
@@ -167,7 +207,9 @@
                                     <i class="fa fa-exclamation-circle fa-2x"></i>Campo Vacio</span> 
                                 </div> 
                             </td> 
-                            <td><button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>  Ajustar Inventario</button></td>
+                            <?php if(isset($_POST['id_almacen']) && ($_POST['id_almacen']!='null')){ ?>
+                            <td><button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>  Ajustar Inventario </button></td>
+                            <?php } ?>
                             <td></td>
                         </tr>
                         <tr class="text-center">

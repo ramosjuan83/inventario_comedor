@@ -214,31 +214,31 @@ class Inv_traslado extends Controlador_padre {
             }
 
              // VALIDACION DESTINO
-             $validoDestino = true;
-             $resultadosDestino = $this->Inv_movimiento_inventario_model->inv_movimiento_saldo_actual($id_articulo,$id_almacen_destino);
-             $arrDatoO=json_encode($resultadosDestino);
+            //  $validoDestino = true;
+            //  $resultadosDestino = $this->Inv_movimiento_inventario_model->inv_movimiento_saldo_actual($id_articulo,$id_almacen_destino);
+            //  $arrDatoO=json_encode($resultadosDestino);
  
-             if($arrDatoO==false){
-                 $saldoDestino=0;
-             }else{
-                 if (is_array($resultadosDestino) || is_object($resultadosDestino)){
-                     foreach ($resultadosDestino as $value)
-                     {
-                             $saldoDestino=$value['saldo_final'];
-                     }
-                 }else{
-                     $saldoDestino=0;
-                 }
-             }
+            //  if($arrDatoO==false){
+            //      $saldoDestino=0;
+            //  }else{
+            //      if (is_array($resultadosDestino) || is_object($resultadosDestino)){
+            //          foreach ($resultadosDestino as $value)
+            //          {
+            //                  $saldoDestino=$value['saldo_final'];
+            //          }
+            //      }else{
+            //          $saldoDestino=0;
+            //      }
+            //  }
  
-             $disponibleDestino=floatval($capacidad_almacen)-floatval($saldoDestino);
-             if($cantidad > $disponibleDestino){
-                 $validoDestino = false;
-             }else{
-                 $validoDestino = true;
-             }
+            //  $disponibleDestino=floatval($capacidad_almacen)-floatval($saldoDestino);
+            //  if($cantidad > $disponibleDestino){
+            //      $validoDestino = false;
+            //  }else{
+            //      $validoDestino = true;
+            //  }
 
-            if($validoOrigen == true && $validoDestino == true){
+            if($validoOrigen == true){
                     $id = $this->Inv_traslado_model->inv_traslado_insertar($nombre,$id_articulo,$fecha,$id_almacen_origen,$id_almacen_destino,$cantidad);
                     if ($id > 0){
                         $mensaje = "Inserto el traslado con id ".$id;

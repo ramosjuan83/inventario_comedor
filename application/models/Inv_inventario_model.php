@@ -107,10 +107,9 @@ class Inv_inventario_model extends CI_Model{
     }
     
 
-    public function inv_inventario_buscar_almacen($b_texto, $por_pagina, $segmento){
+    public function inv_inventario_buscar_almacen($b_texto,$fecha, $por_pagina, $segmento){
 
-        $fecha= date('Y-m-d');
-        $sql = "SELECT 0 as disponible,inv_inventario.id as id,inv_inventario.*,inv_articulo.nombre as nombre_articulo,inv_articulo.id as id_articulo,inv_almacen.nombre as nombre_almacen,inv_unidad_medida.nombre as nombre_medida,monto_ajuste, ADI.monto_ajuste FROM inv_inventario 
+        $sql = "SELECT 0 as disponible,inv_inventario.id as id,inv_inventario.*,inv_articulo.nombre as nombre_articulo,inv_articulo.id as id_articulo,inv_almacen.nombre as nombre_almacen,inv_unidad_medida.nombre as nombre_medida,monto_ajuste, ADI.monto_ajuste,AI.fecha as fecha FROM inv_inventario 
                 INNER JOIN inv_articulo ON inv_articulo.id=inv_inventario.id_articulo 
                 INNER JOIN inv_almacen ON inv_almacen.id=inv_inventario.id_almacen 
                 INNER JOIN inv_unidad_medida ON inv_unidad_medida.id=inv_articulo.id_unidad_medida
@@ -143,7 +142,7 @@ class Inv_inventario_model extends CI_Model{
                        array_push($arrAlmacen,$row->id_almacen);
                 }
 
-                $arrSaldo=$this->Inv_movimiento_inventario_model->inv_movimiento_saldo_fecha($row->id_articulo,$row->id_almacen,date("Y-m-d"));
+                $arrSaldo=$this->Inv_movimiento_inventario_model->inv_movimiento_saldo_fecha($row->id_articulo,$row->id_almacen,$fecha);
 
                 if($arrSaldo){
                     foreach($arrSaldo as $item){
@@ -154,6 +153,7 @@ class Inv_inventario_model extends CI_Model{
                     }
                 }
                 $row->disponible=$saldo>0?$saldo:0;
+                $row->fecha_busqueda=$fecha;
             }
 
             return $resultado->result();

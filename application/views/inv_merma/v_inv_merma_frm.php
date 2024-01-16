@@ -268,6 +268,23 @@
                                     
 
                                 } 
+
+
+                                function mostrar_unidad(valor){
+
+                                    var $select = $("#id_articulo").change(function() {
+                                    // obtengo el value
+                                    var value = $(this).val();
+                                    // obtengo el texto segun el value
+                                    var text = $select.find('option[value=' + value + ']').text();
+                                    // imprime el seleccionado
+                                    let arr=text.split('-');
+                                    document.getElementById("disponibilidadLabel").innerHTML= `Disponibilidad (${arr[1]})`;
+
+                                    });
+
+
+                                }   
                             
                         </script>
 
@@ -316,7 +333,7 @@
                             <div class="col-md-6 float-left">
                                 <label>Artículo <span style="color:#F00;">*</span></label>
                                 <br />
-                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_articulo" name="id_articulo" data-show-subtext="true" data-live-search="true"><?php
+                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_articulo" name="id_articulo" data-show-subtext="true" data-live-search="true" onchange="mostrar_unidad(this.value)"><?php
                                     $valorSel  = $fila_registro->id_articulo;
                                     ?><option value="null">Seleccione</option><?php
                                     for($j = 0; $j < count($matriz_articulos); $j++){
@@ -357,7 +374,7 @@
                                 </span>
                             </div> 
                             <div class="col-md-6 container-fluid">
-                                        <label>Disponibilidad <span style="color:#F00;"></span></label>
+                                        <label id="disponibilidadLabel">Disponibilidad <span style="color:#F00;"></span></label>
                                         <br />
                                         <?php
                                         //echo "fila_personal *"; print_r($fila_registro); echo "*";

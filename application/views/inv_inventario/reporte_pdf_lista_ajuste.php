@@ -11,12 +11,13 @@ class PDF extends PDF_MC_Table
         private $titulo2;
         private $registros_totales;
         
-        public function carga_las_variables($titulo, $titulo2, $registros_totales,$almacen){
+        public function carga_las_variables($titulo, $titulo2, $registros_totales,$almacen,$fecha){
             //$this->matris_conf_empresa          = $matris_conf_empresa;
             $this->titulo                       = $titulo;
             $this->titulo2                       = $titulo2;
             $this->almacen                       = $almacen;
             $this->registros_totales                       = $registros_totales;
+            $this->fecha= $fecha;
         }        
 
 	function Header()
@@ -30,8 +31,10 @@ class PDF extends PDF_MC_Table
 
                 $this->SetFont('Arial','B',11);
                 $this->SetDrawColor(210,210,210);
-                $this->SetTextColor(57, 62, 83);  // Establece el color del texto                 
-                $this->Cell(196, 19, "Fecha: ".date('d/m/Y') , 0, 0, 'R');
+                $this->SetTextColor(57, 62, 83);  // Establece el color del texto       
+                $arrFecha=explode('-',$this->fecha);          
+                $this->Cell(196, 19, "Fecha: ".$arrFecha[2]."-".$arrFecha[1]."-".$arrFecha[0], 0, 0, 'R');
+                //$this->Cell(196, 19, "Fecha: ".$arrFecha[2]."-".$arrFecha[1]."-".$arrFecha[0], 0, 0, 'R');
                 $this->Ln(4); 
 
 
@@ -147,6 +150,7 @@ $pdf->SetAutoPageBreak(true,10); //MARGEN INFERIOR
 
 $titulo = "Toma de Inventario";
 $tiene_filtro = false;  $titulo2 = "";
+$fecha=isset($matriz_inventarios[0]->fecha)?$matriz_inventarios[0]->fecha:$matriz_inventarios[0]->fecha_busqueda;
 
 // if( strlen($b_texto) > 0            ){ $titulo2 .= " Buscar = '".$b_texto."'"; $tiene_filtro = true; }
 
@@ -164,9 +168,10 @@ $registros_totales = 0;
 if($matriz_inventarios != false){
     $registros_totales = count($matriz_inventarios);
     $almacen= $matriz_inventarios[0]->nombre_almacen;
+    
 }
 
-$pdf->carga_las_variables($titulo, $titulo2, $registros_totales,$almacen);
+$pdf->carga_las_variables($titulo, $titulo2, $registros_totales,$almacen,$fecha);
 
 $pdf->AddPage();
 
@@ -174,6 +179,7 @@ $pdf->SetTitle('Reporte');
 //$pdf->Ln();
 //$pdf->SetFillColor(0,0,250);
 $pdf->SetFont('Arial','',8);
+
 
 //for($i = 0; $i < 100; $i++){
 //    $matriz_estudiante_ficha[] = $matriz_estudiante_ficha[0];
@@ -185,6 +191,7 @@ $pdf->SetFont('Arial','',8);
 
 if($matriz_inventarios != false){
     for($i = 0; $i < count($matriz_inventarios); $i++){
+
         
             $pdf->SetDrawColor(210,210,210);
             $pdf->SetTextColor(57, 62, 83);  // Establece el color del texto            
@@ -198,7 +205,7 @@ if($matriz_inventarios != false){
                     $pdf->ajuste_texto($matriz_inventarios[$i]->nombre_articulo)
                 ,   $pdf->ajuste_texto($matriz_inventarios[$i]->disponible)
                 ,   $pdf->ajuste_texto($matriz_inventarios[$i]->nombre_medida)
-                ,   $pdf->ajuste_texto('')
+                ,   ""
             ));
             $pdf->Ln(0);
     }

@@ -214,7 +214,11 @@ class Inv_inventario extends Controlador_padre {
                 $this->pagination->initialize($config); //inicializamos la paginación
                 
                 $almacen=isset($_POST['id_almacen'])?$_POST['id_almacen']:'';
-                $dat_list = $this->Inv_inventario_model->inv_inventario_buscar_almacen($almacen, $config['per_page'],$segmento);
+                $fecha=isset($_POST['fecha_aux'])?$this->ordena_fecha_3($_POST['fecha_aux']):$this->ordena_fecha_4(date("Y-m-d"));
+
+                
+
+                $dat_list = $this->Inv_inventario_model->inv_inventario_buscar_almacen($almacen,$fecha,$config['per_page'],$segmento);
                 if(!isset($_POST['id_almacen'])){
                     $dat_list=[];
                 }
@@ -223,7 +227,7 @@ class Inv_inventario extends Controlador_padre {
 
                 
 //echo "<br>dat_list *<pre>"; print_r($dat_list); echo "</pre>*";                
-                
+                //echo "dat_list".$dat_list;
                 if($dat_list != false){
                     for($i = 0; $i < count($dat_list); $i++){
                         // $inventario_id = $dat_list[$i]->id;  //echo "gerencias_id *".$gerencias_id."*";
@@ -827,10 +831,18 @@ class Inv_inventario extends Controlador_padre {
     }
     
     public function ver_pdf_lista_toma_inventario($b_texto){
+
+
+        $arr=explode('_',$b_texto);
+        $b_texto=$arr[0];
+        $fecha=$arr[3]."-".$arr[2]."-".$arr[1];
+        
         $logged = $this->Conf_usuarios_model->isLogged();
         if($logged == TRUE){
 
-            
+
+            $data['matriz_inventarios']=[];
+
             // if($b_estado == "NULL"){         $b_estado = "";          }
             // $data['b_estado'] = $b_estado;            
             
@@ -840,7 +852,7 @@ class Inv_inventario extends Controlador_padre {
             $b_texto = str_replace("%20", " ", $b_texto); //LE QUITO EL FORMATO DE LOS ESPACIOS ENTRE PALABRAS
             $data['b_texto'] = $b_texto;
 
-            $matriz_inventarios = $this->Inv_inventario_model->inv_inventario_buscar_almacen($b_texto, "", ""); 
+            $matriz_inventarios = $this->Inv_inventario_model->inv_inventario_buscar_almacen($b_texto,$fecha ,"", ""); 
 
             $data['matriz_inventarios'] = $matriz_inventarios;   
             

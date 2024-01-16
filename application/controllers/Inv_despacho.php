@@ -11,6 +11,7 @@ class Inv_despacho extends Controlador_padre {
         $this->load->model('Inv_articulo_model');
         $this->load->model('Inv_almacen_model');
         $this->load->model('Personal_ivic_model');
+        $this->load->model('Inv_unidad_medida_model');
     }
 
     public function listar($memoria = 'false'){
@@ -139,6 +140,9 @@ class Inv_despacho extends Controlador_padre {
 
         $matriz_articulos   = $this->Inv_articulo_model->inv_articulo_buscar_1();
         $matriz_almacenes                     = $this->Inv_almacen_model->inv_almacen_buscar_3();
+
+        $matriz_unidades                     = $this->Inv_unidad_medida_model->inv_unidad_medida_buscar_3();
+        $data['matriz_unidades']             = $matriz_unidades;
 
         $data['matriz_articulos']             = $matriz_articulos;
         $data['matriz_almacenes']             = $matriz_almacenes;

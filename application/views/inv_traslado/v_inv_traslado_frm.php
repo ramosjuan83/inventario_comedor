@@ -217,7 +217,7 @@
                                 cantidadAux  = document.getElementById("cantidadAux").value;
                                 almacenOrigen = document.getElementById("id_almacen_origen").value;
                                 articulo = document.getElementById("id_articulo").value;
-                                disponibilidadDestino2=document.getElementById("disponibilidad_destino").value;
+                                //disponibilidadDestino2=document.getElementById("disponibilidad_destino").value;
 
                                         
 
@@ -231,7 +231,7 @@
                                                     function(data){ //alert(data);
                                                             var resultado = JSON.parse(data); //convierto el valor devuelto a una matris
                                                             let disponibilidad=0;
-                                                            let disponibilidadDestino=0;
+                                                            //let disponibilidadDestino=0;
                                                             if(resultado){
                                                                     disponibilidad=parseFloat(resultado[0].saldo_final);
                                                                     //disponibilidadDestino=parseFloat(document.getElementById("capacidad_almacen").value)-parseFloat(resultado[0].saldo_final);
@@ -250,16 +250,16 @@
                                                             }else{
 
                                                               
-                                                                if(parseFloat(cantidad) > parseFloat(disponibilidadDestino2))
-                                                                    {
-                                                                        $("#cantidad").addClass("border-danger");
-                                                                        $('#error_cantidad_5').css('display', 'block');
-                                                                        ok = false;
-                                                                    }else{
+                                                                // if(parseFloat(cantidad) > parseFloat(disponibilidadDestino2))
+                                                                //     {
+                                                                //         $("#cantidad").addClass("border-danger");
+                                                                //         $('#error_cantidad_5').css('display', 'block');
+                                                                //         ok = false;
+                                                                //     }else{
 
-                                                                        $("#cantidad").removeClass("border-danger");
-                                                                        $('#error_cantidad_5').css('display', 'none');
-                                                                    };
+                                                                //         $("#cantidad").removeClass("border-danger");
+                                                                //         $('#error_cantidad_5').css('display', 'none');
+                                                                //     };
 
                                                                 $("#cantidad").removeClass("border-danger");
                                                                 $('#error_cantidad2').css('display', 'none');
@@ -300,32 +300,48 @@
 
                             function disponibilidadDestino(oper){
 
-                                var baseurl = "<?php echo base_url(); ?>";
-                                cantidad  = document.getElementById("cantidad").value;
-                                almacen = document.getElementById("id_almacen_destino_aux").value;
-                                articulo = document.getElementById("id_articulo_aux").value;
-                                var capacidad = document.getElementById("capacidad_almacen").value; 
+                                // var baseurl = "<?php echo base_url(); ?>";
+                                // cantidad  = document.getElementById("cantidad").value;
+                                // almacen = document.getElementById("id_almacen_destino_aux").value;
+                                // articulo = document.getElementById("id_articulo_aux").value;
+                                // //var capacidad = document.getElementById("capacidad_almacen").value; 
 
 
-                                        if(oper == "agregar" || oper =="editar"){
-                                            $.post(baseurl+"index.php/Inv_inventario/get_inv_movimiento_saldo_actual",
-                                            {
-                                                        almacen: almacen,articulo:articulo
-                                            },
-                                            function(data){ //alert(data);
-                                                    var resultado = JSON.parse(data); //convierto el valor devuelto a una matris
-                                                    if(resultado){
+                                //         if(oper == "agregar" || oper =="editar"){
+                                //             $.post(baseurl+"index.php/Inv_inventario/get_inv_movimiento_saldo_actual",
+                                //             {
+                                //                         almacen: almacen,articulo:articulo
+                                //             },
+                                //             function(data){ //alert(data);
+                                //                     var resultado = JSON.parse(data); //convierto el valor devuelto a una matris
+                                //                     if(resultado){
     
-                                                        document.getElementById("disponibilidad_destino").value= (parseFloat(capacidad) - parseFloat(resultado[0].saldo_final)).toFixed(2);
-                                                    }else{
-                                                        document.getElementById("disponibilidad_destino").value=capacidad;
-                                                    }
+                                //                         document.getElementById("disponibilidad_destino").value= (parseFloat(capacidad) - parseFloat(resultado[0].saldo_final)).toFixed(2);
+                                //                     }else{
+                                //                         document.getElementById("disponibilidad_destino").value=capacidad;
+                                //                     }
                                                     
-                                            })
-                                        }        
+                                //             })
+                                //         }        
 
 
                             }  
+
+                            function mostrar_unidad(valor){
+
+                                var $select = $("#id_articulo_aux").change(function() {
+                                // obtengo el value
+                                var value = $(this).val();
+                                // obtengo el texto segun el value
+                                var text = $select.find('option[value=' + value + ']').text();
+                                // imprime el seleccionado
+                                let arr=text.split('-');
+                                document.getElementById("disponibilidadOrigenLabel").innerHTML= `Disponibilidad Origen (${arr[1]})`;
+
+                                });
+
+
+                            }   
                             
                             function valida_almacen(oper){
 
@@ -344,14 +360,14 @@
                                     function(data){ //alert(data);
 
                                             
-                                            var resultado = JSON.parse(data); //convierto el valor devuelto a una matris
-                                            if(resultado){
-                                                document.getElementById("capacidad_almacen").value = resultado[0].capacidad_almacen;
-                                            }else{
-                                                document.getElementById("capacidad_almacen").value = 'No Posee';
-                                            }
+                                            // var resultado = JSON.parse(data); //convierto el valor devuelto a una matris
+                                            // if(resultado){
+                                            //     document.getElementById("capacidad_almacen").value = resultado[0].capacidad_almacen;
+                                            // }else{
+                                            //     document.getElementById("capacidad_almacen").value = 'No Posee';
+                                            // }
 
-                                            disponibilidadDestino(oper);
+                                           // disponibilidadDestino(oper);
                                         
                                     });
                                 }
@@ -474,7 +490,7 @@
                             <div class="col-md-6 float-left">
                                 <label>Artículo <span style="color:#F00;">*</span></label>
                                 <br />
-                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_articulo_aux" name="id_articulo_aux" data-show-subtext="true" data-live-search="true" <?php if($oper=="agregar"){ echo ""; }else{ echo "disabled";} ?> onchange="asignarArticulo();"><?php
+                                <select class="form-control bg-sigalsx4-purpple_dark text-white selectpicker" id="id_articulo_aux" name="id_articulo_aux" data-show-subtext="true" data-live-search="true" <?php if($oper=="agregar"){ echo ""; }else{ echo "disabled";} ?> onchange="mostrar_unidad();asignarArticulo();"><?php
                                     $valorSel  = $fila_registro->id_articulo;
                                     ?><option value="null">Seleccione</option><?php
                                     for($j = 0; $j < count($matriz_articulos); $j++){
@@ -535,14 +551,14 @@
                                 </span>
                             </div> 
                             <div class="col-md-6 container-fluid">
-                                        <label>Disponibilidad Origen<span style="color:#F00;"></span></label>
+                                        <label id="disponibilidadOrigenLabel">Disponibilidad Origen<span style="color:#F00;"></span></label>
                                         <br />
                                         <?php
                                         //echo "fila_personal *"; print_r($fila_registro); echo "*";
                                         ?>
                                         <input class="form-control" id="disponibilidad_origen" name="disponibilidad_origen" type="text" size="255" maxlength="255" readonly=true  value="<?php if( isset($fila_registro->disponibilidad_origen) ){ echo $fila_registro->disponibilidad_origen; } ?>">
                             </div>
-                            <div class="col-md-6 container-fluid">
+                            <!-- <div class="col-md-6 container-fluid">
                                         <label>Capacidad Max  Destino<span style="color:#F00;"></span></label>
                                         <br />
                                         <?php
@@ -550,7 +566,7 @@
                                         ?>
                                         <input class="form-control" id="disponibilidad_destino" name="disponibilidad_destino" type="text" size="255" maxlength="255" readonly=true  value="<?php if( isset($fila_registro->disponibilidad_destino) ){ echo $fila_registro->disponibilidad_destino; } ?>">
                                         <input class="form-control" id="capacidad_almacen" name="capacidad_almacen" type="hidden" size="255" maxlength="255" readonly=true  value="<?php if( isset($fila_registro->capacidad_almacen) ){ echo $fila_registro->capacidad_almacen; } ?>">
-                                    </div>  
+                                    </div>   -->
                             <div class="col-md-6">
                                         <label>Cantidad <span style="color:#F00;">*</span></label>
                                         <br />
