@@ -116,7 +116,7 @@ class Inv_traslado extends Controlador_padre {
                 $dat_list['b_texto']  = $b_texto;
                 
                 //$data['matriz_conf_configuracion'] = $this->Conf_configuracion_model->conf_configuracion_buscar_2();
-                $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+                $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
                 $this->load->view('plantilla/header', $data);
                 $this->load->view('plantilla/menu');
                 $this->load->view('inv_traslado/v_inv_traslado_listar', $dat_list);
@@ -125,7 +125,7 @@ class Inv_traslado extends Controlador_padre {
         }else{
             $this->session->sess_destroy('username');
             //$data['matriz_conf_configuracion'] = $this->Conf_configuracion_model->conf_configuracion_buscar_2();
-            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('login/v_login_1');
             $this->load->view('plantilla/footer');
@@ -146,14 +146,14 @@ class Inv_traslado extends Controlador_padre {
 
         if($logged == TRUE && $id_conf_roles_es_5 == true){
             $data['oper'] = "agregar";
-            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('plantilla/menu');
             $this->load->view('inv_traslado/v_inv_traslado_frm', $data);
             $this->load->view('plantilla/footer');                
         }else{
             $this->session->sess_destroy('username');
-            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('login/v_login_1');
             $this->load->view('plantilla/footer');
@@ -276,7 +276,7 @@ class Inv_traslado extends Controlador_padre {
             }
         }else{
                     $this->session->sess_destroy('username');
-                    $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+                    $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
                     $this->load->view('plantilla/header', $data);
                     $this->load->view('login/v_login_1');
                     $this->load->view('plantilla/footer');
@@ -309,14 +309,14 @@ class Inv_traslado extends Controlador_padre {
             }
             $data['oper'] = "editar";
 
-            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('plantilla/menu');
             $this->load->view('inv_traslado/v_inv_traslado_frm', $data);
             $this->load->view('plantilla/footer');
         }else{
             $this->session->sess_destroy('username');
-            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('login/v_login_1');
             $this->load->view('plantilla/footer');
@@ -467,7 +467,7 @@ class Inv_traslado extends Controlador_padre {
             }
         }else{
             $this->session->sess_destroy('username');
-            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos.php";
+            $data['ruta_llamados_head'] = "plantilla/llamados_head/llamados_head_basicos2.php";
             $this->load->view('plantilla/header', $data);
             $this->load->view('login/v_login_1');
             $this->load->view('plantilla/footer');            
